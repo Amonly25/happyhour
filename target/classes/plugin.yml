@@ -1,0 +1,12 @@
+main: com.ar.askgaming.happyhour.HHPlugin
+name: HappyHour
+version: 1.0
+author: AskGaming
+description: HappyHour plugin.
+commands:
+  happyhour:
+    description: HappyHour command.
+    usage: /happyhour
+    permission: happyhour.admin
+    aliases:
+    - hh

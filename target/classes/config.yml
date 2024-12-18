@@ -1,0 +1,77 @@
+#HappyHour
+duration_in_minutes: 60
+
+scheduler:
+  monday:
+    18:00:
+    - RANDOM
+    #- MINING
+    #- FISHING
+    #- EXPERIENCE
+    #- WOODCUTTING
+    #- ANY AVAILABLE MODE
+  tuesday:
+    18:00:
+    - RANDOM
+  wednesday:
+    18:00:
+    - RANDOM
+  thursday:
+    18:00:
+    - RANDOM
+  friday:
+    18:00:
+    - RANDOM
+  saturday:
+    18:00:
+    - RANDOM
+  sunday:
+    18:00:
+    - RANDOM
+
+modes:
+  hunting_animals:
+    multiplier: 2
+    chance: 0.7
+  hunting_enemys:
+    multiplier: 2
+    chance: 0.7
+  experience:
+    multiplier: 2
+    chance: 0.7
+  fishing:
+    multiplier: 2
+    chance: 0.7
+  mining:
+    multiplier: 2
+    chance: 0.7
+    blocks:
+    - DIAMOND_ORE
+    - EMERALD_ORE
+    - GOLD_ORE
+    - IRON_ORE
+    - LAPIS_ORE
+    - REDSTONE_ORE
+    - COAL_ORE
+  woodcutting:
+    multiplier: 2
+    chance: 0.7
+    blocks:
+    - OAK_LOG
+    - SPRUCE_LOG
+    - BIRCH_LOG
+    - JUNGLE_LOG
+    - ACACIA_LOG
+    - DARK_OAK_LOG
+  votifier:
+    rewards:
+      1: #Example
+        chance: 1.0 # 100%
+        message: "&6Test" #this message will be sended to the player
+        commands:
+        - eco give %player% 500
+      2: #Support multiple rewards
+        chance: 0.0 # 0%
+        message: ""
+        commands: {}
+  

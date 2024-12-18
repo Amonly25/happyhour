@@ -19,37 +19,56 @@
   </properties>
 
     <repositories>
-    <!-- This adds the Spigot Maven repository to the build -->
-  <repository>
-        <id>spigot-repo</id>
-        <url>https://hub.spigotmc.org/nexus/content/repositories/snapshots/</url>
-    </repository>
+      <repository>
+          <id>spigot-repo</id>
+          <url>https://hub.spigotmc.org/nexus/content/repositories/snapshots/</url>
+      </repository>
 
-    <repository>
-      <id>placeholderapi</id>
-      <url>https://repo.extendedclip.com/content/repositories/placeholderapi/</url>
-    </repository>
-    <!-- Vault repository -->
-    <repository>
-        <id>jitpack.io</id>
-        <url>https://jitpack.io</url>
-    </repository>
+      <repository>
+        <id>placeholderapi</id>
+        <url>https://repo.extendedclip.com/content/repositories/placeholderapi/</url>
+      </repository>
+
+      <repository>
+          <id>jitpack.io</id>
+          <url>https://jitpack.io</url>
+      </repository>
+      
+      <repository>
+        <id>BenCodez Repo</id>
+        <url>https://nexus.bencodez.com/repository/maven-public/</url>
+      </repository>
+
   </repositories>
 
   <dependencies>
 
+    <dependency>
+      <groupId>org.spigotmc</groupId>
+      <artifactId>spigot-api</artifactId>
+      <version>1.21.1-R0.1-SNAPSHOT</version>
+      <scope>provided</scope>
+
+    </dependency>
       <dependency>
-           <groupId>org.spigotmc</groupId>
-           <artifactId>spigot-api</artifactId>
-           <version>1.21.1-R0.1-SNAPSHOT</version>
-           <scope>provided</scope>
+      <groupId>com.github.MilkBowl</groupId>
+      <artifactId>VaultAPI</artifactId>
+      <version>1.7</version>
+      <scope>provided</scope>
     </dependency>
 
-        <dependency>
-        <groupId>com.github.MilkBowl</groupId>
-        <artifactId>VaultAPI</artifactId>
-        <version>1.7</version>
-        <scope>provided</scope>
+    <dependency>
+      <groupId>com.bencodez</groupId>
+      <artifactId>votifierplus</artifactId>
+      <version>LATEST</version>
+      <scope>provided</scope>
+    </dependency>
+
+    <dependency>
+      <groupId>com.github.Zrips</groupId>
+      <artifactId>Jobs</artifactId>
+      <version>LATEST</version> <!-- Change the LATEST to the current version of jobs -->
+      <scope>provided</scope>
     </dependency>
 
   </dependencies>
