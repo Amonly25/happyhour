@@ -1,0 +1,26 @@
+start: "Happy hour of {mode} has started!"
+stop: "Happy hour of {mode} has ended!"
+no_active: "There is no active happy hour!"
+
+mining:
+  name: "Mining"
+hunting_animals:
+  name: "Hunting animals"
+hunting_enemys:
+  name: "Hunting enemys"
+woodcutting:
+  name: "Woodcutting"
+fishing:
+  name: "Fishing"
+experience:
+  name: "Experience"
+jobs:
+  name: "Jobs"
+votifier:
+  name: "Votifier"
+
+help:
+- "&7/happyhour start <mode> <time_minutes> &8- &7Start a happy hour."
+- "&7/happyhour stop &8- &7Stop the current happy hour."
+- "&7/happyhour status &8- &7Show the current happy hour."
+- "&7/happyhour help &8- &7Show this help message."

@@ -2,6 +2,8 @@ package com.ar.askgaming.happyhour;
 
 import org.bukkit.plugin.java.JavaPlugin;
 
+import com.ar.askgaming.happyhour.Managers.HHManager;
+import com.ar.askgaming.happyhour.Managers.LangManager;
 import com.ar.askgaming.happyhour.ModesFromIntegrations.Jobs;
 import com.ar.askgaming.happyhour.ModesFromIntegrations.Votifier;
 import com.ar.askgaming.happyhour.ModesFromListeners.Experience;
@@ -16,6 +18,7 @@ public class HHPlugin extends JavaPlugin{
         saveDefaultConfig();
 
         manager = new HHManager(this);
+        langManager = new LangManager(this);
 
         new Jobs(this);
         new Votifier(this);
@@ -29,7 +32,11 @@ public class HHPlugin extends JavaPlugin{
 
     }
     private HHManager manager;
+    private LangManager langManager;
     
+    public LangManager getLangManager() {
+        return langManager;
+    }
     public void setManager(HHManager manager) {
         this.manager = manager;
     }

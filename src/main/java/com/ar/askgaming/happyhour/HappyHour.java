@@ -1,8 +1,10 @@
 package com.ar.askgaming.happyhour;
 
-import com.ar.askgaming.happyhour.HHManager.Mode;
+import com.ar.askgaming.happyhour.Managers.HHManager.Mode;
 
 public class HappyHour{
+
+    private HHPlugin plugin = HHPlugin.getPlugin(HHPlugin.class);
 
     public HappyHour(Mode mode, long duration) {
         activeSince = System.currentTimeMillis();

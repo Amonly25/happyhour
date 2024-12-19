@@ -1,4 +1,4 @@
-package com.ar.askgaming.happyhour;
+package com.ar.askgaming.happyhour.Managers;
 
 import java.time.DayOfWeek;
 import java.time.LocalDate;
@@ -16,6 +16,8 @@ import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.entity.Player;
 import org.bukkit.scheduler.BukkitRunnable;
 
+import com.ar.askgaming.happyhour.HHPlugin;
+import com.ar.askgaming.happyhour.HappyHour;
 import com.ar.askgaming.happyhour.CustomEvent.HappyHourStartEvent;
 
 public class HHManager extends BukkitRunnable{
@@ -58,9 +60,9 @@ public class HHManager extends BukkitRunnable{
         
         activeHappyHours.add(hh);
         for (Player pl : Bukkit.getOnlinePlayers()){
-            pl.sendMessage("Happy Hour has started!");
-        }
-        
+            String name = plugin.getLangManager().getLang("mode." + mode.name().toLowerCase(), pl);
+            pl.sendMessage(plugin.getLangManager().getLang("start", pl).replace("{mode}", name));
+        }        
     }
 
     public void start(){
@@ -73,10 +75,11 @@ public class HHManager extends BukkitRunnable{
     public void stop(HappyHour hh) {
         hh.setActive(false);
         activeHappyHours.remove(hh);
-        hh = null;
         for (Player pl : Bukkit.getOnlinePlayers()){
-            pl.sendMessage("Happy Hour has ended!");
+            String name = plugin.getLangManager().getLang("mode." + hh.getActualMode().name().toLowerCase(), pl);
+            pl.sendMessage(plugin.getLangManager().getLang("stop", pl).replace("{mode}", name));
         }
+        hh = null;
     }
     public void stop(){
         for (HappyHour hh : activeHappyHours) {

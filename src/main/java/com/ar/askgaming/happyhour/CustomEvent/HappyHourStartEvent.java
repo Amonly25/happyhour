@@ -3,8 +3,8 @@ package com.ar.askgaming.happyhour.CustomEvent;
 import org.bukkit.event.Event;
 import org.bukkit.event.HandlerList;
 
-import com.ar.askgaming.happyhour.HHManager.Mode;
 import com.ar.askgaming.happyhour.HappyHour;
+import com.ar.askgaming.happyhour.Managers.HHManager.Mode;
 
 public class HappyHourStartEvent extends Event {
 
