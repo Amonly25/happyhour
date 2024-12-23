@@ -30,8 +30,8 @@ public class Jobs implements Listener{
         }
         for (HappyHour hh : activeHappyHours) {
             if (hh.getActualMode() == Mode.JOBS) {
-                double chance = plugin.getConfig().getDouble("happyhour.jobs.chance");
-                double multiplier = plugin.getConfig().getDouble("happyhour.jobs.multiplier");
+                double chance = plugin.getConfig().getDouble("modes.jobs.chance");
+                double multiplier = plugin.getConfig().getDouble("modes.jobs.multiplier");
                 if (Math.random() < chance) {
                     e.setExp(e.getExp() * multiplier);
                     Bukkit.broadcastMessage("Debug: " + e.getExp());

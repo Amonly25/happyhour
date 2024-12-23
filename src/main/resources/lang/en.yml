@@ -1,6 +1,8 @@
-start: "Happy hour of {mode} has started!"
-stop: "Happy hour of {mode} has ended!"
-no_active: "There is no active happy hour!"
+start: "&6Happy hour of {mode} has started!"
+stop: "&6Happy hour of {mode} has ended!"
+no_active: "&cThere is no active happy hour!"
+status: "&aHappy hour of {mode} is active now!"
+next: "&7The next happy hour will be in {minutes} minutes."
 
 mining:
   name: "Mining"
@@ -18,6 +20,8 @@ jobs:
   name: "Jobs"
 votifier:
   name: "Votifier"
+all:
+  name: "ALL MODES!"
 
 help:
 - "&7/happyhour start <mode> <time_minutes> &8- &7Start a happy hour."

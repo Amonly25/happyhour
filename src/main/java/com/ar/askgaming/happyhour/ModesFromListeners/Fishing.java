@@ -34,14 +34,15 @@ public class Fishing implements Listener{
         }
         for (HappyHour hh : activeHappyHours) {
             Item item = (Item) e.getCaught();
-            if (hh.getActualMode() == Mode.FISHING) {
-                applyMultiplier(item, "happyhour.fishing.chance", "happyhour.fishing.multiplier", e.getPlayer().getLocation());
+            if (hh.getActualMode() == Mode.FISHING || hh.getActualMode() == Mode.ALL) {
+                applyMultiplier(item, "modes.fishing.chance", "modes.fishing.multiplier", e.getPlayer().getLocation());
             }
         }
     }
     private void applyMultiplier(Item item, String chanceKey, String multiplierKey, Location loc) {
         double chance = plugin.getConfig().getDouble(chanceKey);
         double multiplier = plugin.getConfig().getDouble(multiplierKey);
+        Bukkit.broadcastMessage("Chance: " + chance);
         if (Math.random() < chance) {
             for (int i = 1; i < multiplier; i++) {
                 loc.getWorld().dropItem(loc, item.getItemStack());

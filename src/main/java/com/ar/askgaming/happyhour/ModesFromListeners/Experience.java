@@ -33,10 +33,11 @@ public class Experience implements Listener{
         }
         Entity type = e.getEntity();
         for (HappyHour hh : activeHappyHours) {
-            if (hh.getActualMode() == Mode.EXPERIENCE) {
+            if (hh.getActualMode() == Mode.EXPERIENCE || hh.getActualMode() == Mode.ALL) {
                 if (!(type instanceof Player)) {
-                    int multiplier = plugin.getConfig().getInt("happyhour.experience.multiplier");
-                    double chance = plugin.getConfig().getDouble("happyhour.experience.chance");
+                    int multiplier = plugin.getConfig().getInt("modes.experience.multiplier");
+                    double chance = plugin.getConfig().getDouble("modes.experience.chance");
+                    Bukkit.broadcastMessage("Chance: " + chance);
                     if (Math.random() < chance) {
                         int exp = e.getDroppedExp();
                         type.getWorld().spawn(type.getLocation(), ExperienceOrb.class).setExperience(exp * multiplier);

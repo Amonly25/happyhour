@@ -1,8 +1,10 @@
 main: com.ar.askgaming.happyhour.HHPlugin
 name: HappyHour
 version: 1.3
+api-version: 1.21
 author: AskGaming
 description: HappyHour plugin.
+soft-depend: [PlaceholderAPI, Jobs, VotifierPlus]
 commands:
   happyhour:
     description: HappyHour command.

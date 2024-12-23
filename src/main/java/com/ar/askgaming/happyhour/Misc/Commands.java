@@ -25,7 +25,7 @@ public class Commands implements TabExecutor {
         }
         if (args.length == 2) {
             if (args[0].equalsIgnoreCase("start")) {
-                return List.of("mining", "fishing", "hunting_enemys","hunting_animals", "experience", "woodcutting", "jobs", "votifier");
+                return List.of("mining", "fishing", "hunting_enemys","hunting_animals", "experience", "woodcutting", "jobs", "votifier", "all");
             }
             if (args[0].equalsIgnoreCase("stop")) {
                 return plugin.getManager().getActiveHappyHours().stream().map(hh -> hh.getActualMode().name().toLowerCase()).toList();
@@ -37,7 +37,7 @@ public class Commands implements TabExecutor {
     public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
         
         if (args.length == 0) {
-            start(sender, args);
+            help(sender, args);
             return true;
         }
 
@@ -112,7 +112,6 @@ public class Commands implements TabExecutor {
         Player player = null;
         if (sender instanceof Player) {
             player = (Player) sender;
-            return;
         }
 
         List <HappyHour> activeHappyHours = plugin.getManager().getActiveHappyHours();
@@ -132,7 +131,6 @@ public class Commands implements TabExecutor {
         Player player = null;
         if (sender instanceof Player) {
             player = (Player) sender;
-            return;
         }
         sender.sendMessage(plugin.getLangManager().getLang("help", player));
     }

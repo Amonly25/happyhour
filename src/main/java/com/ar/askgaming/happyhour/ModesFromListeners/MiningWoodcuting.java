@@ -47,6 +47,9 @@ public class MiningWoodcuting implements Listener{
             e.printStackTrace();
         }
         ConfigurationSection section = config.getConfigurationSection("protectedBlocks");
+        if (section == null) {
+            return;
+        }
         for (String key : section.getKeys(false)) {
             Location loc = (Location) section.get(key);
             if (!loc.getBlock().isEmpty()) {
@@ -66,10 +69,11 @@ public class MiningWoodcuting implements Listener{
             return;
         }
         for (HappyHour hh : activeHappyHours) {
-            if (hh.getActualMode() == Mode.MINING) {
-                processBlock(e, "happyhour.mining.blocks", "happyhour.mining.chance", "happyhour.mining.multiplier");
-            } else if (hh.getActualMode() == Mode.WOODCUTTING) {
-                processBlock(e, "happyhour.woodcutting.blocks", "happyhour.woodcutting.chance", "happyhour.woodcutting.multiplier");
+            if (hh.getActualMode() == Mode.MINING || hh.getActualMode() == Mode.ALL) {
+                processBlock(e, "modes.mining.items", "modes.mining.chance", "modes.mining.multiplier");
+            }
+            if (hh.getActualMode() == Mode.WOODCUTTING || hh.getActualMode() == Mode.ALL) {
+                processBlock(e, "modes.woodcutting.items", "modes.woodcutting.chance", "modes.woodcutting.multiplier");
             }
         }
     }
@@ -77,16 +81,24 @@ public class MiningWoodcuting implements Listener{
     private void processBlock(BlockDropItemEvent e, String blocksKey, String chanceKey, String multiplierKey) {
         Block block = e.getBlock();
         if (protectedBlocks.contains(block.getLocation())) {
+            Bukkit.broadcastMessage("multiplierKey");
             return;
         }
-        List<String> drops = plugin.getConfig().getStringList(blocksKey);
-        for (String drop : drops) {
-            if (block.getType().name().equalsIgnoreCase(drop)) {
-                double chance = plugin.getConfig().getDouble(chanceKey);
-                double multiplier = plugin.getConfig().getDouble(multiplierKey);
-                if (Math.random() < chance) {
-                    for (int i = 1; i < multiplier; i++) {
-                        for (Item item : e.getItems()) {
+        Bukkit.broadcastMessage("fired");
+        List<String> list = plugin.getConfig().getStringList(blocksKey);
+        double chance = plugin.getConfig().getDouble(chanceKey);
+        double multiplier = plugin.getConfig().getDouble(multiplierKey);
+
+        List<Item> drops = e.getItems();
+
+        if (Math.random() < chance) {
+            Bukkit.broadcastMessage("Chance: " + chance);
+            for (String blockName : list) {
+                for (Item item : drops) {
+                    Bukkit.broadcastMessage("comparing " + item.getItemStack().getType().toString() + " with " + blockName);
+                    if (item.getItemStack().getType().name().equalsIgnoreCase(blockName)) {
+                        Bukkit.broadcastMessage("same type");
+                        for (int i = 1; i < multiplier; i++) {
                             block.getWorld().dropItem(block.getLocation(), item.getItemStack());
                             //DEBUG
                             Bukkit.broadcastMessage("Dropped item: " + item.getItemStack().getType().name());
@@ -100,8 +112,8 @@ public class MiningWoodcuting implements Listener{
     @EventHandler
     public void onPlace(BlockPlaceEvent e) {
         Block block = e.getBlock();
-        List<String> blocks = plugin.getConfig().getStringList("happyhour.mining.blocks");
-        List<String> woodcuttingBlocks = plugin.getConfig().getStringList("happyhour.woodcutting.blocks");
+        List<String> blocks = plugin.getConfig().getStringList("modes.mining.blocks");
+        List<String> woodcuttingBlocks = plugin.getConfig().getStringList("modes.woodcutting.blocks");
         if (blocks.contains(block.getType().name()) || woodcuttingBlocks.contains(block.getType().name())) {
             protectedBlocks.add(block.getLocation());
             config.set("protectedBlocks." + getXYZ(block.getLocation()), block.getLocation());

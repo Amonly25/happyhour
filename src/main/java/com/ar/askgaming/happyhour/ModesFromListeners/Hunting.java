@@ -37,10 +37,10 @@ public class Hunting implements Listener{
         for (HappyHour hh : activeHappyHours) {
             List<ItemStack> drops = e.getDrops();
             Entity type = e.getEntity();
-            if (hh.getActualMode() == Mode.HUNTING_ANIMALS && type instanceof Animals) {
-                applyMultiplier(drops, "happyhour.hunting_animals.chance", "happyhour.hunting_animals.multiplier", type.getLocation());
-            } else if (hh.getActualMode() == Mode.HUNTING_ENEMYS && type instanceof Enemy) {
-                applyMultiplier(drops, "happyhour.hunting_enemys.chance", "happyhour.hunting_enemys.multiplier", type.getLocation());
+            if ((hh.getActualMode() == Mode.HUNTING_ANIMALS || hh.getActualMode() == Mode.ALL) && type instanceof Animals) {
+                applyMultiplier(drops, "modes.hunting_animals.chance", "modes.hunting_animals.multiplier", type.getLocation());
+            } else if ((hh.getActualMode() == Mode.HUNTING_ENEMYS || hh.getActualMode() == Mode.ALL) && type instanceof Enemy) {
+                applyMultiplier(drops, "modes.hunting_enemys.chance", "modes.hunting_enemys.multiplier", type.getLocation());
             }
         }
     }
@@ -48,6 +48,7 @@ public class Hunting implements Listener{
     private void applyMultiplier(List<ItemStack> drops, String chanceKey, String multiplierKey, Location loc) {
         double chance = plugin.getConfig().getDouble(chanceKey);
         double multiplier = plugin.getConfig().getDouble(multiplierKey);
+        Bukkit.broadcastMessage("Chance: " + chance);
         if (Math.random() < chance) {
             for (ItemStack drop : drops) {
                 for (int i = 1; i < multiplier; i++)

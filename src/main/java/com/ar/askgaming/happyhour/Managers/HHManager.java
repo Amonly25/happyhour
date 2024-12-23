@@ -10,6 +10,7 @@ import java.time.temporal.TemporalAdjusters;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
+import java.util.concurrent.CopyOnWriteArrayList;
 
 import org.bukkit.Bukkit;
 import org.bukkit.configuration.ConfigurationSection;
@@ -35,10 +36,11 @@ public class HHManager extends BukkitRunnable{
         WOODCUTTING,
         JOBS,
         VOTIFIER,
+        ALL,
 
     }
 
-    private List<HappyHour> activeHappyHours = new ArrayList<>();
+    private final CopyOnWriteArrayList<HappyHour> activeHappyHours = new CopyOnWriteArrayList<>();
 
     public List<HappyHour> getActiveHappyHours() {
         return activeHappyHours;
@@ -49,6 +51,7 @@ public class HHManager extends BukkitRunnable{
         if (mode == null) {
             mode = getRandomMode();
         }
+
         if (duration == 0) {
             // set dafeault value
             duration = 3600L;
@@ -60,7 +63,7 @@ public class HHManager extends BukkitRunnable{
         
         activeHappyHours.add(hh);
         for (Player pl : Bukkit.getOnlinePlayers()){
-            String name = plugin.getLangManager().getLang("mode." + mode.name().toLowerCase(), pl);
+            String name = plugin.getLangManager().getLang(mode.name().toLowerCase()+".name", pl);
             pl.sendMessage(plugin.getLangManager().getLang("start", pl).replace("{mode}", name));
         }        
     }
@@ -76,7 +79,7 @@ public class HHManager extends BukkitRunnable{
         hh.setActive(false);
         activeHappyHours.remove(hh);
         for (Player pl : Bukkit.getOnlinePlayers()){
-            String name = plugin.getLangManager().getLang("mode." + hh.getActualMode().name().toLowerCase(), pl);
+            String name = plugin.getLangManager().getLang(hh.getActualMode().name().toLowerCase()+".name", pl);
             pl.sendMessage(plugin.getLangManager().getLang("stop", pl).replace("{mode}", name));
         }
         hh = null;
@@ -88,6 +91,17 @@ public class HHManager extends BukkitRunnable{
     }
 
     private Mode getRandomMode() {
+        List<String> modes = plugin.getConfig().getStringList("enabled_types");
+        if (modes.isEmpty()) {
+            plugin.getLogger().severe("No enabled types found in config");
+        }
+        try {
+            return Mode.valueOf(modes.get((int) (Math.random() * modes.size())).toUpperCase());
+        } catch (IllegalArgumentException e) {
+            plugin.getLogger().severe("Invalid mode in config");
+            
+        }
+        
         return Mode.values()[(int) (Math.random() * Mode.values().length)];
     }
 
