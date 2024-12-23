@@ -58,13 +58,15 @@ modes:
     multiplier: 2
     chance: 0.7
     items:
-    - DIAMOND_ORE
-    - EMERALD_ORE
-    - GOLD_ORE
-    - IRON_ORE
-    - LAPIS_ORE
-    - REDSTONE_ORE
-    - COAL_ORE
+    - DIAMOND
+    - EMERALD
+    - COAL
+    - REDSTONE
+    - LAPIS_LAZULI
+    - RAW_IRON
+    - RAW_GOLD
+    - RAW_COPPER
+    - GOLD_NUGGET
   woodcutting:
     multiplier: 2
     chance: 0.7
