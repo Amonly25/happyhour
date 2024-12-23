@@ -77,11 +77,14 @@ modes:
     - JUNGLE_LOG
     - ACACIA_LOG
     - DARK_OAK_LOG
+  jobs:
+    multiplier: 2
+    chance: 0.7
   votifier:
     rewards:
       1: #Example
         chance: 1.0 # 100%
-        message: "&6Test" #this message will be sended to the player
+        message: "&6You get extra rewards for voting in happyhour!" #this message will be sended to the player
         commands:
         - eco give %player% 500
       2: #Support multiple rewards

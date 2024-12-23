@@ -2,7 +2,6 @@ package com.ar.askgaming.happyhour.ModesFromListeners;
 
 import java.util.List;
 
-import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.entity.Animals;
 import org.bukkit.entity.Enemy;
@@ -48,13 +47,13 @@ public class Hunting implements Listener{
     private void applyMultiplier(List<ItemStack> drops, String chanceKey, String multiplierKey, Location loc) {
         double chance = plugin.getConfig().getDouble(chanceKey);
         double multiplier = plugin.getConfig().getDouble(multiplierKey);
-        Bukkit.broadcastMessage("Chance: " + chance);
+
         if (Math.random() < chance) {
             for (ItemStack drop : drops) {
                 for (int i = 1; i < multiplier; i++)
                 loc.getWorld().dropItem(loc, drop);
                 //DEBUG
-                Bukkit.broadcastMessage("Dropped item: " + drop.getType().name());
+                //Bukkit.broadcastMessage("Dropped item: " + drop.getType().name());
             }
         }
     }

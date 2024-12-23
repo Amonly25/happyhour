@@ -2,7 +2,6 @@ package com.ar.askgaming.happyhour.ModesFromListeners;
 
 import java.util.List;
 
-import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.entity.Item;
 import org.bukkit.event.EventHandler;
@@ -42,12 +41,12 @@ public class Fishing implements Listener{
     private void applyMultiplier(Item item, String chanceKey, String multiplierKey, Location loc) {
         double chance = plugin.getConfig().getDouble(chanceKey);
         double multiplier = plugin.getConfig().getDouble(multiplierKey);
-        Bukkit.broadcastMessage("Chance: " + chance);
+
         if (Math.random() < chance) {
             for (int i = 1; i < multiplier; i++) {
                 loc.getWorld().dropItem(loc, item.getItemStack());
                 //DEBUG
-                Bukkit.broadcastMessage("Dropped item: " + item.getItemStack().getType().name());
+               // Bukkit.broadcastMessage("Dropped item: " + item.getItemStack().getType().name());
             }
         }
     }

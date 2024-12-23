@@ -1,0 +1,29 @@
+start: "&6¡La hora feliz de {mode} ha comenzado!"
+stop: "&6¡La hora feliz de {mode} ha terminado!"
+no_active: "&c¡No hay ninguna hora feliz activa!"
+status: "&a¡La hora feliz de {mode} está activa ahora!"
+next: "&7La próxima hora feliz será en {minutes} minutos."
+
+mining:
+  name: "Minería"
+hunting_animals:
+  name: "Caza de animales"
+hunting_enemys:
+  name: "Caza de enemigos"
+woodcutting:
+  name: "Tala de árboles"
+fishing:
+  name: "Pesca"
+experience:
+  name: "Experiencia"
+jobs:
+  name: "Trabajos"
+votifier:
+  name: "Votifier"
+all:
+  name: "¡TODOS LOS MODOS!"
+
+help:
+- "&7/happyhour start <mode> <time_minutes> &8- &7Iniciar una hora feliz."
+- "&7/happyhour stop &8- &7Detener la hora feliz actual."
+- "&7/happyhour status &8- &7Mostrar la

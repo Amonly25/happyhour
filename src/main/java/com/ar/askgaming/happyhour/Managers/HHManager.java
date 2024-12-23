@@ -26,6 +26,8 @@ public class HHManager extends BukkitRunnable{
     private HHPlugin plugin;
     public HHManager(HHPlugin plugin) {
         this.plugin = plugin;
+
+        runTaskTimer(plugin, 0, 20*60);
     }
     public enum Mode {
         MINING,
@@ -54,10 +56,12 @@ public class HHManager extends BukkitRunnable{
 
         if (duration == 0) {
             // set dafeault value
-            duration = 3600L;
+            duration = plugin.getConfig().getLong("duration_in_minutes",60);
         }
 
         HappyHour hh = new HappyHour(mode, duration);
+        String displayName = plugin.getLangManager().getLang(mode.name().toLowerCase()+".name", null);
+        hh.setDisplayName(displayName);
         HappyHourStartEvent event = new HappyHourStartEvent(hh);
         Bukkit.getPluginManager().callEvent(event);
         
@@ -115,7 +119,7 @@ public class HHManager extends BukkitRunnable{
         }
         for (HappyHour hh : activeHappyHours) {
             if (hh.isActive()) {
-                if (System.currentTimeMillis() - hh.getActiveSince() > hh.getDuration()) {
+                if (System.currentTimeMillis() - hh.getActiveSince() > hh.getDuration()*60000) {
                     stop(hh);
                 }
             }

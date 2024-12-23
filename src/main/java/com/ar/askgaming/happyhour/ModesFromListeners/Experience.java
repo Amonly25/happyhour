@@ -2,7 +2,6 @@ package com.ar.askgaming.happyhour.ModesFromListeners;
 
 import java.util.List;
 
-import org.bukkit.Bukkit;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.ExperienceOrb;
 import org.bukkit.entity.Player;
@@ -37,12 +36,12 @@ public class Experience implements Listener{
                 if (!(type instanceof Player)) {
                     int multiplier = plugin.getConfig().getInt("modes.experience.multiplier");
                     double chance = plugin.getConfig().getDouble("modes.experience.chance");
-                    Bukkit.broadcastMessage("Chance: " + chance);
+
                     if (Math.random() < chance) {
                         int exp = e.getDroppedExp();
                         type.getWorld().spawn(type.getLocation(), ExperienceOrb.class).setExperience(exp * multiplier);
                         //DEBUG
-                        Bukkit.broadcastMessage("Dropped " + exp * (multiplier-1) + " experience");
+                       // Bukkit.broadcastMessage("Dropped " + exp * (multiplier-1) + " experience");
                     }
                 }
             }

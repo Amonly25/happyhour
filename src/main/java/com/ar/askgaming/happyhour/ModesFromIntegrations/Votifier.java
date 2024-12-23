@@ -5,7 +5,6 @@ import java.util.List;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.configuration.file.FileConfiguration;
-import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -31,7 +30,7 @@ public class Votifier implements Listener {
             return;
         }
         for (HappyHour hh : activeHappyHours) {
-            if (hh.getActualMode() == Mode.EXPERIENCE) {
+            if (hh.getActualMode() == Mode.EXPERIENCE || hh.getActualMode() == Mode.ALL) {
 
                 String playerName = e.getVote().getUsername();
 
@@ -45,6 +44,7 @@ public class Votifier implements Listener {
                     String message = config.getString("modes.votifier.rewards." + key + ".message");
                     List<String> commands = config.getStringList("modes.votifier.rewards." + key + ".commands");
                     double chance = config.getDouble("modes.votifier.rewards." + key + ".chance");
+                    
                     if (Math.random() < chance) {
                         if (!message.equals("")) {
                             player.sendMessage(ChatColor.translateAlternateColorCodes('&', message));

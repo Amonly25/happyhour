@@ -2,8 +2,6 @@ package com.ar.askgaming.happyhour.ModesFromIntegrations;
 
 import java.util.List;
 
-import org.bukkit.Bukkit;
-import org.bukkit.entity.Entity;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 
@@ -24,35 +22,39 @@ public class Jobs implements Listener{
     }
     @EventHandler
     public void onExpGain(JobsExpGainEvent e){
+
         List<HappyHour> activeHappyHours = plugin.getManager().getActiveHappyHours();
         if (activeHappyHours.isEmpty()) {
             return;
         }
         for (HappyHour hh : activeHappyHours) {
-            if (hh.getActualMode() == Mode.JOBS) {
+            if (hh.getActualMode() == Mode.JOBS || hh.getActualMode() == Mode.ALL) {
                 double chance = plugin.getConfig().getDouble("modes.jobs.chance");
                 double multiplier = plugin.getConfig().getDouble("modes.jobs.multiplier");
+
                 if (Math.random() < chance) {
                     e.setExp(e.getExp() * multiplier);
-                    Bukkit.broadcastMessage("Debug: " + e.getExp());
+                    //Bukkit.broadcastMessage("Debug: " + e.getExp());
                 }
             }
         }
     }
 
     @EventHandler
-    public void onExpGain(JobsPaymentEvent e){
+    public void onPayment(JobsPaymentEvent e){
+
         List<HappyHour> activeHappyHours = plugin.getManager().getActiveHappyHours();
         if (activeHappyHours.isEmpty()) {
             return;
         }
         for (HappyHour hh : activeHappyHours) {
-            if (hh.getActualMode() == Mode.JOBS) {
-                double chance = plugin.getConfig().getDouble("happyhour.jobs.chance");
-                double multiplier = plugin.getConfig().getDouble("happyhour.jobs.multiplier");
+            if (hh.getActualMode() == Mode.JOBS || hh.getActualMode() == Mode.ALL) {
+                double chance = plugin.getConfig().getDouble("modes.jobs.chance");
+                double multiplier = plugin.getConfig().getDouble("modes.jobs.multiplier");
+
                 if (Math.random() < chance) {
                     e.set(CurrencyType.MONEY, e.get(CurrencyType.MONEY) * multiplier);
-                    Bukkit.broadcastMessage("Debug: " + e.get(CurrencyType.MONEY));
+                    //Bukkit.broadcastMessage("Debug: " + e.get(CurrencyType.MONEY));
                 }
             }
         }

@@ -5,6 +5,7 @@ import org.bukkit.plugin.java.JavaPlugin;
 import com.ar.askgaming.happyhour.Managers.HHManager;
 import com.ar.askgaming.happyhour.Managers.LangManager;
 import com.ar.askgaming.happyhour.Misc.Commands;
+import com.ar.askgaming.happyhour.Misc.PlaceHolder;
 import com.ar.askgaming.happyhour.ModesFromIntegrations.Jobs;
 import com.ar.askgaming.happyhour.ModesFromIntegrations.Votifier;
 import com.ar.askgaming.happyhour.ModesFromListeners.Experience;
@@ -31,6 +32,9 @@ public class HHPlugin extends JavaPlugin{
         }
         if (getServer().getPluginManager().getPlugin("VotifierPlus") != null) {
             new Votifier(this);
+        }
+        if (getServer().getPluginManager().getPlugin("PlaceholderAPI") != null) {
+            new PlaceHolder(this).register();
         }
 
         new Commands(this);

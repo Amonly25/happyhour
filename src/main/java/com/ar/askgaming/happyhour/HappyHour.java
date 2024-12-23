@@ -4,8 +4,6 @@ import com.ar.askgaming.happyhour.Managers.HHManager.Mode;
 
 public class HappyHour{
 
-    private HHPlugin plugin = HHPlugin.getPlugin(HHPlugin.class);
-
     public HappyHour(Mode mode, long duration) {
         activeSince = System.currentTimeMillis();
         this.actualMode = mode;
@@ -16,6 +14,15 @@ public class HappyHour{
     private long activeSince;
     private Mode actualMode;
     private boolean active = true;
+    private String displayName;
+
+    public String getDisplayName() {
+        return displayName;
+    }
+
+    public void setDisplayName(String displayName) {
+        this.displayName = displayName;
+    }
 
     public void setActive(boolean active) {
         this.active = active;

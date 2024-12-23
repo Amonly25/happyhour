@@ -84,7 +84,7 @@ public class MiningWoodcuting implements Listener{
             Bukkit.broadcastMessage("multiplierKey");
             return;
         }
-        Bukkit.broadcastMessage("fired");
+
         List<String> list = plugin.getConfig().getStringList(blocksKey);
         double chance = plugin.getConfig().getDouble(chanceKey);
         double multiplier = plugin.getConfig().getDouble(multiplierKey);
@@ -92,16 +92,16 @@ public class MiningWoodcuting implements Listener{
         List<Item> drops = e.getItems();
 
         if (Math.random() < chance) {
-            Bukkit.broadcastMessage("Chance: " + chance);
+
             for (String blockName : list) {
                 for (Item item : drops) {
-                    Bukkit.broadcastMessage("comparing " + item.getItemStack().getType().toString() + " with " + blockName);
+
                     if (item.getItemStack().getType().name().equalsIgnoreCase(blockName)) {
-                        Bukkit.broadcastMessage("same type");
+
                         for (int i = 1; i < multiplier; i++) {
                             block.getWorld().dropItem(block.getLocation(), item.getItemStack());
                             //DEBUG
-                            Bukkit.broadcastMessage("Dropped item: " + item.getItemStack().getType().name());
+                            //Bukkit.broadcastMessage("Dropped item: " + item.getItemStack().getType().name());
                         }
                     }
                 }
