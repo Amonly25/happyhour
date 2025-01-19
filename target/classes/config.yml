@@ -47,7 +47,13 @@ modes:
     chance: 0.7
   hunting_enemys:
     multiplier: 2
-    chance: 0.7
+    chance: 0.5
+    blacklist_items:
+    - TOTEM_OF_UNDYING
+    - NETHER_STAR
+    - WITHER_SKELETON_SKULL
+    - OMINOUS_BOTTLE
+    
   experience:
     multiplier: 2
     chance: 0.7
@@ -56,7 +62,7 @@ modes:
     chance: 0.7
   mining:
     multiplier: 2
-    chance: 0.7
+    chance: 0.4
     items:
     - DIAMOND
     - EMERALD
@@ -69,7 +75,7 @@ modes:
     - GOLD_NUGGET
   woodcutting:
     multiplier: 2
-    chance: 0.7
+    chance: 0.5
     items:
     - OAK_LOG
     - SPRUCE_LOG

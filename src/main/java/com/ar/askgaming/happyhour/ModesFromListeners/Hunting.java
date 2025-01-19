@@ -47,9 +47,12 @@ public class Hunting implements Listener{
     private void applyMultiplier(List<ItemStack> drops, String chanceKey, String multiplierKey, Location loc) {
         double chance = plugin.getConfig().getDouble(chanceKey);
         double multiplier = plugin.getConfig().getDouble(multiplierKey);
-
+        List<String> blackList = plugin.getConfig().getStringList("modes.hunting_enemys.blacklist_items");
         if (Math.random() < chance) {
             for (ItemStack drop : drops) {
+                if (blackList.contains(drop.getType().name())) {
+                    continue;
+                }
                 for (int i = 1; i < multiplier; i++)
                 loc.getWorld().dropItem(loc, drop);
                 //DEBUG

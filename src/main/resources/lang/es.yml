@@ -26,4 +26,4 @@ all:
 help:
 - "&7/happyhour start <mode> <time_minutes> &8- &7Iniciar una hora feliz."
 - "&7/happyhour stop &8- &7Detener la hora feliz actual."
-- "&7/happyhour status &8- &7Mostrar la
+- "&7/happyhour status &8- &7Muestra el estado de la hora feliz actual."

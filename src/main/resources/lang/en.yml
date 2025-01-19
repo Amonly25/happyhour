@@ -27,4 +27,3 @@ help:
 - "&7/happyhour start <mode> <time_minutes> &8- &7Start a happy hour."
 - "&7/happyhour stop &8- &7Stop the current happy hour."
 - "&7/happyhour status &8- &7Show the current happy hour."
-- "&7/happyhour help &8- &7Show this help message."
