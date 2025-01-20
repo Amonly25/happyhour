@@ -4,6 +4,7 @@ no_active: "&cThere is no active happy hour!"
 status: "&aHappy hour of {mode} is active now!"
 next: "&7The next happy hour will be in {minutes} minutes."
 
+
 mining:
   name: "Mining"
 hunting_animals:

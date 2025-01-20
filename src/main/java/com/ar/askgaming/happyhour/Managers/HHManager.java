@@ -69,7 +69,8 @@ public class HHManager extends BukkitRunnable{
         for (Player pl : Bukkit.getOnlinePlayers()){
             String name = plugin.getLangManager().getLang(mode.name().toLowerCase()+".name", pl);
             pl.sendMessage(plugin.getLangManager().getLang("start", pl).replace("{mode}", name));
-        }        
+        }  
+        plugin.getLogger().info("Happy hour started: " + hh.getDisplayName());      
     }
 
     public void start(){
@@ -109,6 +110,8 @@ public class HHManager extends BukkitRunnable{
         return Mode.values()[(int) (Math.random() * Mode.values().length)];
     }
 
+    long broadcastCooldown = 0;
+
     @Override
     public void run() {
 
@@ -117,8 +120,18 @@ public class HHManager extends BukkitRunnable{
         if (activeHappyHours.isEmpty()){
             return;
         }
+        long currentTime = System.currentTimeMillis();
         for (HappyHour hh : activeHappyHours) {
             if (hh.isActive()) {
+
+                if (currentTime - broadcastCooldown > 1000*60*10) {
+                    for (Player pl : Bukkit.getOnlinePlayers()){
+                        String name = plugin.getLangManager().getLang(hh.getActualMode().name().toLowerCase()+".name", pl);
+                        pl.sendMessage(plugin.getLangManager().getLang("status", pl).replace("{mode}", name));
+                    }
+                    broadcastCooldown = currentTime;
+                }
+
                 if (System.currentTimeMillis() - hh.getActiveSince() > hh.getDuration()*60000) {
                     stop(hh);
                 }
