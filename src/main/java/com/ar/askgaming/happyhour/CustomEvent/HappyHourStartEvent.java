@@ -15,11 +15,6 @@ public class HappyHourStartEvent extends Event {
         this.hh = hh;
     }
 
-    @Override
-    public HandlerList getHandlers() {
-        return handlers;
-    }
-
     private Mode mode;
     private HappyHour hh;
 
@@ -29,5 +24,13 @@ public class HappyHourStartEvent extends Event {
 
     public Mode getMode() {
         return mode;
+    }
+
+    @Override
+    public HandlerList getHandlers() {
+        return handlers;
+    }
+    public static HandlerList getHandlerList() {
+        return new HandlerList();
     }
 }
