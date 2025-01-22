@@ -1,6 +1,6 @@
 main: com.ar.askgaming.happyhour.HHPlugin
 name: HappyHour
-version: 1.3
+version: 1.4
 api-version: 1.21
 author: AskGaming
 description: HappyHour plugin.
