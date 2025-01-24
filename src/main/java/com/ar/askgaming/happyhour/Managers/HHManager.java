@@ -62,7 +62,9 @@ public class HHManager extends BukkitRunnable{
         HappyHour hh = new HappyHour(mode, duration);
         String displayName = plugin.getLangManager().getLang(mode.name().toLowerCase()+".name", null);
         hh.setDisplayName(displayName);
-        HappyHourStartEvent event = new HappyHourStartEvent(hh);
+        HappyHourStartEvent event = plugin.getHappyHourStartEvent();
+        event.setHh(hh);
+        event.setMode(mode);
         Bukkit.getPluginManager().callEvent(event);
         
         activeHappyHours.add(hh);

@@ -2,6 +2,7 @@ package com.ar.askgaming.happyhour;
 
 import org.bukkit.plugin.java.JavaPlugin;
 
+import com.ar.askgaming.happyhour.CustomEvent.HappyHourStartEvent;
 import com.ar.askgaming.happyhour.Managers.HHManager;
 import com.ar.askgaming.happyhour.Managers.LangManager;
 import com.ar.askgaming.happyhour.Misc.Commands;
@@ -21,7 +22,8 @@ public class HHPlugin extends JavaPlugin{
 
         manager = new HHManager(this);
         langManager = new LangManager(this);
-
+        happyHourStartEvent = new HappyHourStartEvent();
+        
         new Experience(this);
         new Fishing(this);
         new Hunting(this);
@@ -45,7 +47,11 @@ public class HHPlugin extends JavaPlugin{
     }
     private HHManager manager;
     private LangManager langManager;
+    private HappyHourStartEvent happyHourStartEvent;
     
+    public HappyHourStartEvent getHappyHourStartEvent() {
+        return happyHourStartEvent;
+    }
     public LangManager getLangManager() {
         return langManager;
     }

@@ -8,15 +8,34 @@ import com.ar.askgaming.happyhour.Managers.HHManager.Mode;
 
 public class HappyHourStartEvent extends Event {
 
-    private HandlerList handlers = new HandlerList();
+    private static final HandlerList HANDLERS = new HandlerList();
 
-    public HappyHourStartEvent(HappyHour hh) {
-        this.mode = hh.getActualMode();
-        this.hh = hh;
+    public static HandlerList getHandlerList() {
+        return HANDLERS;
+    }
+
+    @Override
+    public HandlerList getHandlers() {
+        return HANDLERS;
+    }
+
+    public HappyHourStartEvent() {
     }
 
     private Mode mode;
+    public void setMode(Mode mode) {
+        this.mode = mode;
+    }
+
     private HappyHour hh;
+
+    public void setHh(HappyHour hh) {
+        this.hh = hh;
+    }
+
+    public HappyHour getHh() {
+        return hh;
+    }
 
     public HappyHour getHappyHour() {
         return hh;
@@ -26,11 +45,4 @@ public class HappyHourStartEvent extends Event {
         return mode;
     }
 
-    @Override
-    public HandlerList getHandlers() {
-        return handlers;
-    }
-    public static HandlerList getHandlerList() {
-        return new HandlerList();
-    }
 }
