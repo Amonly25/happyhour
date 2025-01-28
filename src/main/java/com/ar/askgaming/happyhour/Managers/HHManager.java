@@ -16,10 +16,13 @@ import org.bukkit.Bukkit;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.entity.Player;
 import org.bukkit.scheduler.BukkitRunnable;
+import org.checkerframework.checker.units.qual.C;
 
 import com.ar.askgaming.happyhour.HHPlugin;
 import com.ar.askgaming.happyhour.HappyHour;
 import com.ar.askgaming.happyhour.CustomEvent.HappyHourStartEvent;
+
+import net.md_5.bungee.api.ChatColor;
 
 public class HHManager extends BukkitRunnable{
 
@@ -61,7 +64,9 @@ public class HHManager extends BukkitRunnable{
 
         HappyHour hh = new HappyHour(mode, duration);
         String displayName = plugin.getLangManager().getLang(mode.name().toLowerCase()+".name", null);
+        String description = plugin.getLangManager().getLang(mode.name().toLowerCase()+".description", null);
         hh.setDisplayName(displayName);
+        hh.setDescription(description);
         HappyHourStartEvent event = plugin.getHappyHourStartEvent();
         event.setHh(hh);
         event.setMode(mode);
@@ -70,7 +75,9 @@ public class HHManager extends BukkitRunnable{
         activeHappyHours.add(hh);
         for (Player pl : Bukkit.getOnlinePlayers()){
             String name = plugin.getLangManager().getLang(mode.name().toLowerCase()+".name", pl);
+            String descriptionMsg = plugin.getLangManager().getLang(mode.name().toLowerCase()+".description", pl);
             pl.sendMessage(plugin.getLangManager().getLang("start", pl).replace("{mode}", name));
+            pl.sendMessage(ChatColor.translateAlternateColorCodes('&', descriptionMsg));
         }  
         plugin.getLogger().info("Happy hour started: " + hh.getDisplayName());      
     }

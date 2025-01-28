@@ -6,20 +6,28 @@ next: "&7La próxima hora feliz será en {minutes} minutos."
 
 mining:
   name: "Minería"
+  description: "Obtén el doble de minerales al minar."
 hunting_animals:
   name: "Caza de animales"
+  description: "Obtén el doble de drops al cazar animales."
 hunting_enemys:
   name: "Caza de enemigos"
+  description: "Obtén el doble de drops al cazar enemigos."
 woodcutting:
   name: "Tala de árboles"
+  description: "Obtén el doble de drops al talar árboles."
 fishing:
   name: "Pesca"
+  description: "Obtén el doble de drops al pescar."
 experience:
   name: "Experiencia"
+  description: "Obtén el doble de experiencia al matar mobs"
 jobs:
   name: "Trabajos"
+  description: "Obtén el doble de dinero al trabajar."
 votifier:
   name: "Votifier"
+  description: "Obtén el doble de recompensas al votar."
 all:
   name: "¡TODOS LOS MODOS!"
 

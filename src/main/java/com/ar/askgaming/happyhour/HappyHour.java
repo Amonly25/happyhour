@@ -15,6 +15,15 @@ public class HappyHour{
     private Mode actualMode;
     private boolean active = true;
     private String displayName;
+    private String description;
+
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
+    }
 
     public String getDisplayName() {
         return displayName;
