@@ -1,4 +1,4 @@
-package com.ar.askgaming.happyhour.Managers;
+package com.ar.askgaming.happyhour;
 
 import java.time.DayOfWeek;
 import java.time.LocalDate;
@@ -16,11 +16,8 @@ import org.bukkit.Bukkit;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.entity.Player;
 import org.bukkit.scheduler.BukkitRunnable;
-import org.checkerframework.checker.units.qual.C;
 
-import com.ar.askgaming.happyhour.HHPlugin;
-import com.ar.askgaming.happyhour.HappyHour;
-import com.ar.askgaming.happyhour.CustomEvent.HappyHourStartEvent;
+import com.ar.askgaming.happyhour.Events.HappyHourStartEvent;
 
 import net.md_5.bungee.api.ChatColor;
 
@@ -63,8 +60,10 @@ public class HHManager extends BukkitRunnable{
         }
 
         HappyHour hh = new HappyHour(mode, duration);
+        plugin.getChallengeManager().startChallenge(mode);
         String displayName = plugin.getLangManager().getLang(mode.name().toLowerCase()+".name", null);
         String description = plugin.getLangManager().getLang(mode.name().toLowerCase()+".description", null);
+        plugin.getScoreBoard().setMode(displayName);
         hh.setDisplayName(displayName);
         hh.setDescription(description);
         HappyHourStartEvent event = plugin.getHappyHourStartEvent();
@@ -74,6 +73,7 @@ public class HHManager extends BukkitRunnable{
         
         activeHappyHours.add(hh);
         for (Player pl : Bukkit.getOnlinePlayers()){
+            plugin.getScoreBoard().addPlayer(pl);
             String name = plugin.getLangManager().getLang(mode.name().toLowerCase()+".name", pl);
             String descriptionMsg = plugin.getLangManager().getLang(mode.name().toLowerCase()+".description", pl);
             pl.sendMessage(plugin.getLangManager().getLang("start", pl).replace("{mode}", name));
@@ -95,6 +95,7 @@ public class HHManager extends BukkitRunnable{
         for (Player pl : Bukkit.getOnlinePlayers()){
             String name = plugin.getLangManager().getLang(hh.getActualMode().name().toLowerCase()+".name", pl);
             pl.sendMessage(plugin.getLangManager().getLang("stop", pl).replace("{mode}", name));
+            plugin.getScoreBoard().removePlayer(pl);
         }
         hh = null;
     }
@@ -132,6 +133,10 @@ public class HHManager extends BukkitRunnable{
         long currentTime = System.currentTimeMillis();
         for (HappyHour hh : activeHappyHours) {
             if (hh.isActive()) {
+
+                long left = hh.getDuration()*60000 - (System.currentTimeMillis() - hh.getActiveSince());
+                String timeleft = left/60000 + " min";
+                plugin.getScoreBoard().setTimeLeft(timeleft);
 
                 if (currentTime - broadcastCooldown > 1000*60*10) {
                     for (Player pl : Bukkit.getOnlinePlayers()){

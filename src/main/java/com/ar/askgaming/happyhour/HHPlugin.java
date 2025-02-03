@@ -1,18 +1,21 @@
 package com.ar.askgaming.happyhour;
 
+import org.bukkit.configuration.serialization.ConfigurationSerialization;
 import org.bukkit.plugin.java.JavaPlugin;
 
-import com.ar.askgaming.happyhour.CustomEvent.HappyHourStartEvent;
-import com.ar.askgaming.happyhour.Managers.HHManager;
-import com.ar.askgaming.happyhour.Managers.LangManager;
+import com.ar.askgaming.happyhour.Challenges.Challenge;
+import com.ar.askgaming.happyhour.Challenges.ChallengeManager;
+import com.ar.askgaming.happyhour.Events.HappyHourStartEvent;
 import com.ar.askgaming.happyhour.Misc.Commands;
+import com.ar.askgaming.happyhour.Misc.HHScoreBoard;
+import com.ar.askgaming.happyhour.Misc.Language;
 import com.ar.askgaming.happyhour.Misc.PlaceHolder;
-import com.ar.askgaming.happyhour.ModesFromIntegrations.Jobs;
-import com.ar.askgaming.happyhour.ModesFromIntegrations.Votifier;
-import com.ar.askgaming.happyhour.ModesFromListeners.Experience;
-import com.ar.askgaming.happyhour.ModesFromListeners.Fishing;
-import com.ar.askgaming.happyhour.ModesFromListeners.Hunting;
-import com.ar.askgaming.happyhour.ModesFromListeners.MiningWoodcuting;
+import com.ar.askgaming.happyhour.Modes.FromIntegrations.Jobs;
+import com.ar.askgaming.happyhour.Modes.FromIntegrations.Votifier;
+import com.ar.askgaming.happyhour.Modes.FromListeners.Experience;
+import com.ar.askgaming.happyhour.Modes.FromListeners.Fishing;
+import com.ar.askgaming.happyhour.Modes.FromListeners.Hunting;
+import com.ar.askgaming.happyhour.Modes.FromListeners.MiningWoodcuting;
 
 
 public class HHPlugin extends JavaPlugin{
@@ -20,9 +23,13 @@ public class HHPlugin extends JavaPlugin{
     public void onEnable(){
         saveDefaultConfig();
 
+        ConfigurationSerialization.registerClass(Challenge.class,"Challenge");
+
         manager = new HHManager(this);
-        langManager = new LangManager(this);
+        langManager = new Language(this);
         happyHourStartEvent = new HappyHourStartEvent();
+        scoreBoard = new HHScoreBoard(this);
+        challengeManager = new ChallengeManager(this);
         
         new Experience(this);
         new Fishing(this);
@@ -46,13 +53,21 @@ public class HHPlugin extends JavaPlugin{
 
     }
     private HHManager manager;
-    private LangManager langManager;
+    private Language langManager;
     private HappyHourStartEvent happyHourStartEvent;
+    private HHScoreBoard scoreBoard;
+    private ChallengeManager challengeManager;
     
+    public ChallengeManager getChallengeManager() {
+        return challengeManager;
+    }
+    public HHScoreBoard getScoreBoard() {
+        return scoreBoard;
+    }
     public HappyHourStartEvent getHappyHourStartEvent() {
         return happyHourStartEvent;
     }
-    public LangManager getLangManager() {
+    public Language getLangManager() {
         return langManager;
     }
     public void setManager(HHManager manager) {

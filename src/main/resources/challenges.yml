@@ -1,0 +1,111 @@
+# You can add as many challenges as you want
+# Experience and jobs are not supported
+# Available types: FISHING, MINING, HUNTING_ANIMALS, HUNTING_ENEMYS, WOODCUTTING, VOTIFIER
+
+fish_easy:
+  type: FISHING
+  name: "Catch Fishes - Easy"
+  amount: 10 # Amount of fish to catch per player / So if 10 players are in the challenge, 100 fish need to be caught
+  rewards:
+  - eco add %player% 25
+  # - give %player% diamond 1
+fish_medium:
+  type: FISHING
+  name: "Catch Fishes - Medium"
+  amount: 15 # Amount of fish to catch per player / So if 10 players are in the challenge, 100 fish need to be caught
+  rewards:
+  - eco add %player% 50
+  # - give %player% diamond 1
+# fish_hard:
+#   type: FISHING
+#   name: "Fishing Challenge - Hard"
+#   amount: 20
+#   rewards:
+#   - eco add %player% 25
+#   # - give %player% diamond 1
+
+mining_easy:
+  type: MINING
+  name: "Break Minerals - Easy"
+  amount: 100 # Amount of blocks to mine per player / So if 10 players are in the challenge, 1000 blocks need to be mined
+  rewards:
+  - eco add %player% 15
+  # - give %player% diamond 1
+mining_medium:
+  type: MINING
+  name: "Break Minerals - Medium"
+  amount: 200 # Amount of blocks to mine per player / So if 10 players are in the challenge, 1000 blocks need to be mined
+  rewards:
+  - eco add %player% 30
+  # - give %player% diamond 1
+mining_hard:
+  type: MINING
+  name: "Break Minerals - Hard"
+  amount: 300 # Amount of blocks to mine per player / So if 10 players are in the challenge, 1000 blocks need to be mined
+  rewards:
+  - eco add %player% 50
+
+animals_easy:
+  type: HUNTING_ANIMALS
+  name: "Kill animals - Easy"
+  amount: 15
+  rewards:
+  - eco add %player% 15
+animals_medium:
+  type: HUNTING_ANIMALS
+  name: "Kill animals - Medium"
+  amount: 40
+  rewards:
+  - eco add %player% 30
+animals_hard:
+  type: HUNTING_ANIMALS
+  name: "Kill animals - Hard"
+  amount: 80
+  rewards:
+  - eco add %player% 50
+
+enemy_easy:
+  type: HUNTING_ENEMYS
+  name: "Hunting Enemys - Easy"
+  amount: 50
+  rewards:
+  - eco add %player% 15
+enemy_medium:
+  type: HUNTING_ENEMYS
+  name: "Hunting Enemys - Medium"
+  amount: 100
+  rewards:
+  - eco add %player% 30
+enemy_hard:
+  type: HUNTING_ENEMYS
+  name: "Hunting Enemys - Hard"
+  amount: 200
+  rewards:
+  - eco add %player% 50
+
+woodcutting_easy:
+  type: WOODCUTTING
+  name: "Break wood - Easy"
+  amount: 50
+  rewards:
+  - eco add %player% 15
+woodcutting_medium:
+  type: WOODCUTTING
+  name: "Break wood - Medium"
+  amount: 100
+  rewards:
+  - eco add %player% 30
+woodcutting_hard:
+  type: WOODCUTTING
+  name: "Break wood - Hard"
+  amount: 200
+  rewards:
+  - eco add %player% 50
+
+
+votifier_challenge:
+  type: VOTIFIER
+  name: "Votifier Challenge"
+  amount: 1
+  rewards:
+  - eco add %player% 25

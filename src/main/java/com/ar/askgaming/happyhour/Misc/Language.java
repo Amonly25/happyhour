@@ -1,4 +1,4 @@
-package com.ar.askgaming.happyhour.Managers;
+package com.ar.askgaming.happyhour.Misc;
 
 import java.io.File;
 import java.io.IOException;
@@ -12,10 +12,10 @@ import com.ar.askgaming.happyhour.HHPlugin;
 
 import net.md_5.bungee.api.ChatColor;
 
-public class LangManager {
+public class Language {
 
     private HHPlugin plugin;
-    public LangManager(HHPlugin plugin) {
+    public Language(HHPlugin plugin) {
         this.plugin = plugin;
 
         // Save default lang file from resources if it doesn't exist

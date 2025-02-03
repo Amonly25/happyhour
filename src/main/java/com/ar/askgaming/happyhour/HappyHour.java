@@ -1,6 +1,6 @@
 package com.ar.askgaming.happyhour;
 
-import com.ar.askgaming.happyhour.Managers.HHManager.Mode;
+import com.ar.askgaming.happyhour.HHManager.Mode;
 
 public class HappyHour{
 

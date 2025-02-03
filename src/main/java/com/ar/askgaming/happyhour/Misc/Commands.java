@@ -9,7 +9,7 @@ import org.bukkit.entity.Player;
 
 import com.ar.askgaming.happyhour.HHPlugin;
 import com.ar.askgaming.happyhour.HappyHour;
-import com.ar.askgaming.happyhour.Managers.HHManager.Mode;
+import com.ar.askgaming.happyhour.HHManager.Mode;
 
 public class Commands implements TabExecutor {
 

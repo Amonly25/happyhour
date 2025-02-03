@@ -1,4 +1,4 @@
-package com.ar.askgaming.happyhour.ModesFromListeners;
+package com.ar.askgaming.happyhour.Modes.FromListeners;
 
 import java.util.List;
 
@@ -11,7 +11,7 @@ import org.bukkit.event.player.PlayerFishEvent.State;
 
 import com.ar.askgaming.happyhour.HHPlugin;
 import com.ar.askgaming.happyhour.HappyHour;
-import com.ar.askgaming.happyhour.Managers.HHManager.Mode;
+import com.ar.askgaming.happyhour.HHManager.Mode;
 
 public class Fishing implements Listener{
 

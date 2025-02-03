@@ -1,10 +1,10 @@
-package com.ar.askgaming.happyhour.CustomEvent;
+package com.ar.askgaming.happyhour.Events;
 
 import org.bukkit.event.Event;
 import org.bukkit.event.HandlerList;
 
 import com.ar.askgaming.happyhour.HappyHour;
-import com.ar.askgaming.happyhour.Managers.HHManager.Mode;
+import com.ar.askgaming.happyhour.HHManager.Mode;
 
 public class HappyHourStartEvent extends Event {
 
