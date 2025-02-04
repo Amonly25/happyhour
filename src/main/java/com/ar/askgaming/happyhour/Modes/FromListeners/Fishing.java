@@ -11,6 +11,7 @@ import org.bukkit.event.player.PlayerFishEvent.State;
 
 import com.ar.askgaming.happyhour.HHPlugin;
 import com.ar.askgaming.happyhour.HappyHour;
+import com.ar.askgaming.happyhour.Challenges.Challenge;
 import com.ar.askgaming.happyhour.HHManager.Mode;
 
 public class Fishing implements Listener{
@@ -35,6 +36,7 @@ public class Fishing implements Listener{
             Item item = (Item) e.getCaught();
             if (hh.getActualMode() == Mode.FISHING || hh.getActualMode() == Mode.ALL) {
                 applyMultiplier(item, "modes.fishing.chance", "modes.fishing.multiplier", e.getPlayer().getLocation());
+                plugin.getChallengeManager().increaseProgress(Mode.FISHING);
             }
         }
     }

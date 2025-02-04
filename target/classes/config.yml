@@ -1,6 +1,14 @@
 #HappyHour
 duration_in_minutes: 60
 
+scoreboard:
+  enabled: true
+  title: "&6&lHappyHour"
+  mode: "&7Mode: "
+  timeleft: "&7Time left: "
+  challenge: "&7Challenge: "
+  count: "&7Progress: "
+
 #This will apply to get the random mode
 enabled_types:
 - MINING

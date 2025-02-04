@@ -9,6 +9,9 @@ import org.bukkit.entity.Player;
 
 import com.ar.askgaming.happyhour.HHPlugin;
 import com.ar.askgaming.happyhour.HappyHour;
+
+import net.md_5.bungee.api.ChatColor;
+
 import com.ar.askgaming.happyhour.HHManager.Mode;
 
 public class Commands implements TabExecutor {
@@ -37,7 +40,12 @@ public class Commands implements TabExecutor {
     public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
         
         if (args.length == 0) {
-            help(sender, args);
+            status(sender, args);
+            return true;
+        }
+
+        if (!sender.hasPermission("happyhour.admin")) {
+            sender.sendMessage("§cYou don't have permission to use this command");
             return true;
         }
 
@@ -120,8 +128,10 @@ public class Commands implements TabExecutor {
             return;
         }else {
             for (HappyHour hh : activeHappyHours) {
-                String name = plugin.getLangManager().getLang(hh.getActualMode().name().toLowerCase()+".name", player);
-                sender.sendMessage(plugin.getLangManager().getLang("status", player).replace("{mode}", name));
+                    String name = plugin.getLangManager().getLang(hh.getActualMode().name().toLowerCase()+".name", player);
+                    String descriptionMsg = plugin.getLangManager().getLang(hh.getActualMode().name().toLowerCase()+".description", player);
+                    sender.sendMessage(plugin.getLangManager().getLang("start", player).replace("{mode}", name));
+                    sender.sendMessage(ChatColor.translateAlternateColorCodes('&', descriptionMsg));
             }
         }
         long minutesToNextHappyHour = plugin.getManager().getMinutesToNextHappyHour();

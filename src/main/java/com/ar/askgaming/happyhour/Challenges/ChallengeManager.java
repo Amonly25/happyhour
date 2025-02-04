@@ -83,14 +83,39 @@ public class ChallengeManager {
     public void startChallenge(Mode type) {
         currentChallenge = getRandomChallenge(type);
         if (currentChallenge == null) {
+            plugin.getScoreBoard().setChallenge("-");
+            plugin.getScoreBoard().setCount("-");
             plugin.getLogger().severe("No challenges found for type: " + type.name());
             return;
         }
 
         for (Player p : Bukkit.getOnlinePlayers()){
-            p.sendMessage("§6You have started a new challenge: " + currentChallenge.getName());
+            p.sendMessage(plugin.getLangManager().getLang("challenge.start", p).replace("{name}", currentChallenge.getName()));
+            p.sendMessage("");
         }
+        currentChallenge.reset();
         plugin.getScoreBoard().setChallenge(currentChallenge.getName());
         plugin.getScoreBoard().setCount("0/"+currentChallenge.getAmount());
     }
+    public void increaseProgress(Mode mode){
+        if (getCurrentChallenge().getType() == mode) {
+
+            Challenge challenge = getCurrentChallenge();
+
+            if (challenge != null) {
+                if (challenge.isCompleted()){
+                    return;
+                }
+                int progress = challenge.getProgress();
+                challenge.setProgress(progress + 1);
+                plugin.getScoreBoard().setCount(progress + 1 + "/" + challenge.getAmount());
+
+                if (challenge.getProgress() >= challenge.getAmount()) {
+                    plugin.getScoreBoard().setCount("Completed");
+                    challenge.proccesRewards();
+                    challenge.setCompleted(true);
+                }
+            }
+        }
+    }  
 }

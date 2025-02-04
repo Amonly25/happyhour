@@ -38,8 +38,10 @@ public class Hunting implements Listener{
             Entity type = e.getEntity();
             if ((hh.getActualMode() == Mode.HUNTING_ANIMALS || hh.getActualMode() == Mode.ALL) && type instanceof Animals) {
                 applyMultiplier(drops, "modes.hunting_animals.chance", "modes.hunting_animals.multiplier", type.getLocation());
+                plugin.getChallengeManager().increaseProgress(Mode.HUNTING_ANIMALS);
             } else if ((hh.getActualMode() == Mode.HUNTING_ENEMYS || hh.getActualMode() == Mode.ALL) && type instanceof Enemy) {
                 applyMultiplier(drops, "modes.hunting_enemys.chance", "modes.hunting_enemys.multiplier", type.getLocation());
+                plugin.getChallengeManager().increaseProgress(Mode.HUNTING_ENEMYS);
             }
         }
     }

@@ -24,28 +24,32 @@ public class HHScoreBoard {
 
         board = plugin.getServer().getScoreboardManager().getNewScoreboard();
 
-        Objective obj = board.registerNewObjective("Happyhour", Criteria.DUMMY, "§a§lHappy Hour");
+        Objective obj = board.registerNewObjective("Happyhour", Criteria.DUMMY, plugin.getConfig().getString("scoreboard.title","§6HappyHour").replace('&', '§'));
         obj.setDisplaySlot(DisplaySlot.SIDEBAR);
 
         obj.getScore("§a").setScore(6);
 
         mode = board.registerNewTeam("mode");
-        mode.addEntry("§7Mode: ");
-        obj.getScore("§7Mode: ").setScore(5);
+        String text = plugin.getConfig().getString("scoreboard.mode","§7Mode: ").replace('&', '§');
+        mode.addEntry(text);
+        obj.getScore(text).setScore(5);
 
         timeLeft = board.registerNewTeam("timeLeft");
-        timeLeft.addEntry("§7Time left: ");
-        obj.getScore("§7Time left: ").setScore(4);
+        String text2 = plugin.getConfig().getString("scoreboard.timeLeft","§7Time left: ").replace('&', '§');
+        timeLeft.addEntry(text2);
+        obj.getScore(text2).setScore(4);
 
         obj.getScore("").setScore(3);
 
         challenge = board.registerNewTeam("challenge");
-        challenge.addEntry("§7Challenge: ");
-        obj.getScore("§7Challenge: ").setScore(2);
+        String text3 = plugin.getConfig().getString("scoreboard.challenge","§7Challenge: ").replace('&', '§');
+        challenge.addEntry(text3);
+        obj.getScore(text3).setScore(2);
 
         count = board.registerNewTeam("count");
-        count.addEntry("§7Count: ");
-        obj.getScore("§7Count: ").setScore(1);
+        String text4 = plugin.getConfig().getString("scoreboard.count", "§7Count: ").replace('&', '§');
+        count.addEntry(text4);
+        obj.getScore(text4).setScore(1);
 
         setTimeLeft(60 + " min");
         
@@ -67,6 +71,10 @@ public class HHScoreBoard {
         return board;
     }
     public void addPlayer(Player p) {
+        Boolean b = plugin.getConfig().getBoolean("scoreboard.enable", true);
+        if (!b) {
+            return;
+        }
         p.setScoreboard(board);
     }
     public void removePlayer(Player p) {

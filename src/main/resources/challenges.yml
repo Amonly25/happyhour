@@ -86,7 +86,7 @@ enemy_hard:
 woodcutting_easy:
   type: WOODCUTTING
   name: "Break wood - Easy"
-  amount: 50
+  amount: 40
   rewards:
   - eco add %player% 15
 woodcutting_medium:
@@ -98,7 +98,7 @@ woodcutting_medium:
 woodcutting_hard:
   type: WOODCUTTING
   name: "Break wood - Hard"
-  amount: 200
+  amount: 150
   rewards:
   - eco add %player% 50
 

@@ -31,6 +31,9 @@ votifier:
 all:
   name: "¡TODOS LOS MODOS!"
 
+challenge:
+  start: "&7¡Desafío global iniciado: &6{name}, complétalo para obtener recompensas!"
+
 help:
 - "&7/happyhour start <mode> <time_minutes> &8- &7Iniciar una hora feliz."
 - "&7/happyhour stop &8- &7Detener la hora feliz actual."

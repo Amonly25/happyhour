@@ -84,20 +84,28 @@ public class MiningWoodcuting implements Listener{
             Bukkit.broadcastMessage("multiplierKey");
             return;
         }
-
         List<String> list = plugin.getConfig().getStringList(blocksKey);
         double chance = plugin.getConfig().getDouble(chanceKey);
         double multiplier = plugin.getConfig().getDouble(multiplierKey);
 
         List<Item> drops = e.getItems();
 
-        if (Math.random() < chance) {
+        for (String blockName : list) {
+            for (Item item : drops) {
 
-            for (String blockName : list) {
-                for (Item item : drops) {
+                if (item.getItemStack().getType().name().equalsIgnoreCase(blockName)) {
 
-                    if (item.getItemStack().getType().name().equalsIgnoreCase(blockName)) {
-
+                    switch (blocksKey) {
+                        case "modes.mining.items":
+                            plugin.getChallengeManager().increaseProgress(Mode.MINING);
+                            break;
+                    
+                        default:
+                            plugin.getChallengeManager().increaseProgress(Mode.WOODCUTTING);
+                            break;
+                    }
+                    if (Math.random() < chance) {
+                        
                         for (int i = 1; i < multiplier; i++) {
                             block.getWorld().dropItem(block.getLocation(), item.getItemStack());
                             //DEBUG

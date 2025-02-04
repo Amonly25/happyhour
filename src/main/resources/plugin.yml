@@ -9,6 +9,6 @@ commands:
   happyhour:
     description: HappyHour command.
     usage: /happyhour
-    permission: happyhour.admin
+    permission: happyhour.status
     aliases:
     - hh

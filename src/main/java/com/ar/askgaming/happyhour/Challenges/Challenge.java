@@ -1,13 +1,12 @@
 package com.ar.askgaming.happyhour.Challenges;
 
 import java.util.List;
-import java.util.Map;
 
-import org.bukkit.configuration.serialization.ConfigurationSerializable;
+import org.bukkit.Bukkit;
 
 import com.ar.askgaming.happyhour.HHManager.Mode;
 
-public class Challenge implements ConfigurationSerializable{
+public class Challenge {
 
     private Mode type;
     private int amount;
@@ -24,28 +23,10 @@ public class Challenge implements ConfigurationSerializable{
         this.rewards = rewards;
     }
 
-    public Challenge(Map<String, Object> map) {
-        this.type = Mode.valueOf((String) map.get("type"));
-        this.amount = (int) map.get("amount");
-        this.name = (String) map.get("name");
-        this.rewards = (List<String>) map.get("rewards");
-    }
-
     public Mode getType() {
         return type;
     }
-    
 
-    @Override
-    public Map<String, Object> serialize() {
-        Map<String, Object> map = Map.of(
-            "type", type.name(),
-            "amount", amount,
-            "name", name,
-            "rewards", rewards
-        );
-        return map;
-    }
     public int getAmount() {
         return amount;
     }
@@ -84,5 +65,15 @@ public class Challenge implements ConfigurationSerializable{
 
     public void setRewards(List<String> rewards) {
         this.rewards = rewards;
+    }
+    public void proccesRewards(){
+        for (String reward : rewards) {
+            Bukkit.getOnlinePlayers().forEach(p -> Bukkit.dispatchCommand(Bukkit.getConsoleSender(), reward.replace("%player%", p.getName())));
+        }
+    }
+
+    public void reset() {
+        progress = 0;
+        completed = false;
     }
 }

@@ -30,8 +30,9 @@ public class Votifier implements Listener {
             return;
         }
         for (HappyHour hh : activeHappyHours) {
-            if (hh.getActualMode() == Mode.EXPERIENCE || hh.getActualMode() == Mode.ALL) {
+            if (hh.getActualMode() == Mode.VOTIFIER || hh.getActualMode() == Mode.ALL) {
 
+                plugin.getChallengeManager().increaseProgress(Mode.VOTIFIER);
                 String playerName = e.getVote().getUsername();
 
                 Player player = Bukkit.getPlayer(playerName);

@@ -4,33 +4,36 @@ no_active: "&cThere is no active happy hour!"
 status: "&aHappy hour of {mode} is active now!"
 next: "&7The next happy hour will be in {minutes} minutes."
 
-
 mining:
   name: "Mining"
-  description: "Get double the amount of ores when mining."
+  description: "&eGet double the amount of ores when mining."
 hunting_animals:
   name: "Hunting animals"
-  description: "Get double the amount of drops when hunting animals."
+  description: "&eGet double the amount of drops when hunting animals."
 hunting_enemys:
   name: "Hunting enemys"
-  description: "Get double the amount of drops when hunting enemys."
+  description: "&eGet double the amount of drops when hunting enemys."
 woodcutting:
   name: "Woodcutting"
-  description: "Get double the amount of drops when woodcutting."
+  description: "&eGet double the amount of drops when woodcutting."
 fishing:
   name: "Fishing"
-  description: "Get double the amount of drops when fishing."
+  description: "&eGet double the amount of drops when fishing."
 experience:
   name: "Experience"
-  description: "Get double the amount of experience when killing mobs."
+  description: "&eGet double the amount of experience when killing mobs."
 jobs:
   name: "Jobs"
-  description: "Get double the amount of money when working."
+  description: "&eGet double the amount of money when working."
 votifier:
   name: "Votifier"
-  description: "Get double the amount of rewards when voting."
+  description: "&eGet double the amount of rewards when voting."
 all:
   name: "ALL MODES!"
+
+
+challenge:
+  start: "&7Global Challenge started: &6{name}, complete it to get rewards!"
 
 help:
 - "&7/happyhour start <mode> <time_minutes> &8- &7Start a happy hour."

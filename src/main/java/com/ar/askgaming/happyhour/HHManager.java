@@ -60,7 +60,7 @@ public class HHManager extends BukkitRunnable{
         }
 
         HappyHour hh = new HappyHour(mode, duration);
-        plugin.getChallengeManager().startChallenge(mode);
+
         String displayName = plugin.getLangManager().getLang(mode.name().toLowerCase()+".name", null);
         String description = plugin.getLangManager().getLang(mode.name().toLowerCase()+".description", null);
         plugin.getScoreBoard().setMode(displayName);
@@ -76,9 +76,11 @@ public class HHManager extends BukkitRunnable{
             plugin.getScoreBoard().addPlayer(pl);
             String name = plugin.getLangManager().getLang(mode.name().toLowerCase()+".name", pl);
             String descriptionMsg = plugin.getLangManager().getLang(mode.name().toLowerCase()+".description", pl);
+            pl.sendMessage("");
             pl.sendMessage(plugin.getLangManager().getLang("start", pl).replace("{mode}", name));
             pl.sendMessage(ChatColor.translateAlternateColorCodes('&', descriptionMsg));
-        }  
+        }
+        plugin.getChallengeManager().startChallenge(mode);
         plugin.getLogger().info("Happy hour started: " + hh.getDisplayName());      
     }
 
