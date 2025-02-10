@@ -93,6 +93,10 @@ public class HHManager extends BukkitRunnable{
     //#region stop
     public void stop(HappyHour hh) {
         hh.setActive(false);
+        if (plugin.getChallengeManager().getCurrentChallenge() != null){
+            plugin.getChallengeManager().getCurrentChallenge().reset();
+
+        }
         activeHappyHours.remove(hh);
         for (Player pl : Bukkit.getOnlinePlayers()){
             String name = plugin.getLangManager().getLang(hh.getActualMode().name().toLowerCase()+".name", pl);

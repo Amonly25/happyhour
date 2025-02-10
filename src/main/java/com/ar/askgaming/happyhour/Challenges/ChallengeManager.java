@@ -54,7 +54,7 @@ public class ChallengeManager {
 
             int players = Bukkit.getOnlinePlayers().size();
 
-            challenges.add(new Challenge(type, amount*players, name, rewards));
+            challenges.add(new Challenge(type, amount+(players*amount), name, rewards));
         }
     }
 
@@ -93,9 +93,10 @@ public class ChallengeManager {
             p.sendMessage(plugin.getLangManager().getLang("challenge.start", p).replace("{name}", currentChallenge.getName()));
             p.sendMessage("");
         }
-        currentChallenge.reset();
+        currentChallenge.setProgress(0);
         plugin.getScoreBoard().setChallenge(currentChallenge.getName());
         plugin.getScoreBoard().setCount("0/"+currentChallenge.getAmount());
+        
     }
     public void increaseProgress(Mode mode){
         if (getCurrentChallenge().getType() == mode) {
