@@ -17,28 +17,32 @@ import com.ar.askgaming.happyhour.HHPlugin;
 
 public class ChallengeManager {
 
-    File file;
-    FileConfiguration config;
+    private File file;
+    private FileConfiguration config;
     
-    List<Challenge> challenges = new ArrayList<>();
+    private List<Challenge> challenges = new ArrayList<>();
+    private List<Player> players = new ArrayList<>();
 
     private HHPlugin plugin;
     public ChallengeManager(HHPlugin plugin) {
         this.plugin = plugin;
 
         file = new File(plugin.getDataFolder(), "challenges.yml");
+        reload();
+    }
+    public void reload() {
+
         if (!file.exists()) {
             plugin.saveResource("challenges.yml", false);
         }
 
-        config = new YamlConfiguration();
-        try {
-            config.load(file);
-        } catch (IOException | InvalidConfigurationException e) {
-            e.printStackTrace();
-        }
+        config = YamlConfiguration.loadConfiguration(file);
 
         Set<String> keys = config.getKeys(false);
+        if (keys.isEmpty()) {
+            plugin.getLogger().severe("No challenges found in challenges.yml");
+            return;
+        }
 
         for (String path : keys) {
             Mode type;
@@ -80,7 +84,7 @@ public class ChallengeManager {
         return challenges;
     }
 
-    public void startChallenge(Mode type) {
+    public void startGlobalChallenge(Mode type) {
         currentChallenge = getRandomChallenge(type);
         if (currentChallenge == null) {
             plugin.getScoreBoard().setChallenge("-");
@@ -109,6 +113,9 @@ public class ChallengeManager {
                 }
                 int progress = challenge.getProgress();
                 challenge.setProgress(progress + 1);
+                // if (challenge.getPlayers()){
+
+                // }
                 plugin.getScoreBoard().setCount(progress + 1 + "/" + challenge.getAmount());
 
                 if (challenge.getProgress() >= challenge.getAmount()) {

@@ -1,8 +1,10 @@
 package com.ar.askgaming.happyhour.Challenges;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.bukkit.Bukkit;
+import org.bukkit.entity.Player;
 
 import com.ar.askgaming.happyhour.HHManager.Mode;
 
@@ -15,6 +17,11 @@ public class Challenge {
     private String name;
 
     private List<String> rewards;
+    private List<Player> players = new ArrayList<>();
+
+    public List<Player> getPlayers() {
+        return players;
+    }
 
     public Challenge(Mode type, int amount, String name, List<String> rewards) {
         this.type = type;
@@ -69,6 +76,7 @@ public class Challenge {
     public void proccesRewards(){
         for (String reward : rewards) {
             Bukkit.getOnlinePlayers().forEach(p -> Bukkit.dispatchCommand(Bukkit.getConsoleSender(), reward.replace("%player%", p.getName())));
+            // players.forEach(p -> Bukkit.dispatchCommand(Bukkit.getConsoleSender(), reward.replace("%player%", p.getName())));
         }
     }
 

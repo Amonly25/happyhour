@@ -80,7 +80,7 @@ public class HHManager extends BukkitRunnable{
             pl.sendMessage(plugin.getLangManager().getLang("start", pl).replace("{mode}", name));
             pl.sendMessage(ChatColor.translateAlternateColorCodes('&', descriptionMsg));
         }
-        plugin.getChallengeManager().startChallenge(mode);
+        plugin.getChallengeManager().startGlobalChallenge(mode);
         plugin.getLogger().info("Happy hour started: " + hh.getDisplayName());      
     }
 
