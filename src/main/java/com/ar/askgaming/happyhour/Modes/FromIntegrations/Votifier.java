@@ -25,6 +25,15 @@ public class Votifier implements Listener {
 
     @EventHandler
     public void onVote(VotifierEvent e){
+        String playerName = e.getVote().getUsername();
+
+        Player player = Bukkit.getPlayer(playerName);
+        if (player == null) {
+            return;
+        }
+
+        plugin.getChallengeManager().increaseProgress(Mode.VOTIFIER, player, null, null);
+
         List<HappyHour> activeHappyHours = plugin.getManager().getActiveHappyHours();
         if (activeHappyHours.isEmpty()) {
             return;
@@ -32,13 +41,6 @@ public class Votifier implements Listener {
         for (HappyHour hh : activeHappyHours) {
             if (hh.getActualMode() == Mode.VOTIFIER || hh.getActualMode() == Mode.ALL) {
 
-                plugin.getChallengeManager().increaseProgress(Mode.VOTIFIER);
-                String playerName = e.getVote().getUsername();
-
-                Player player = Bukkit.getPlayer(playerName);
-                if (player == null) {
-                    return;
-                }
                 FileConfiguration config = plugin.getConfig();
                 for (String key : config.getConfigurationSection("modes.votifier.rewards").getKeys(false)) {
                                         

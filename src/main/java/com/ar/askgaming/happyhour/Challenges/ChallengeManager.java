@@ -1,15 +1,17 @@
 package com.ar.askgaming.happyhour.Challenges;
 
 import java.io.File;
-import java.io.IOException;
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
 
 import org.bukkit.Bukkit;
-import org.bukkit.configuration.InvalidConfigurationException;
+import org.bukkit.Material;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
+import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
 
 import com.ar.askgaming.happyhour.HHManager.Mode;
@@ -21,16 +23,29 @@ public class ChallengeManager {
     private FileConfiguration config;
     
     private List<Challenge> challenges = new ArrayList<>();
-    private List<Player> players = new ArrayList<>();
+
+    private List<Challenge> globalChallenges = new ArrayList<>();
+    private HashMap<Player, List<Challenge>> soloChallenges = new HashMap<>();
+    private List<Challenge> raceChallenges = new ArrayList<>();
+
+    public enum Type{
+        GLOBAL,
+        SOLO,
+        RACE,
+        UNASSIGNED
+    }
 
     private HHPlugin plugin;
     public ChallengeManager(HHPlugin plugin) {
         this.plugin = plugin;
 
         file = new File(plugin.getDataFolder(), "challenges.yml");
-        reload();
+        loadChallenges();
+
+        new Commands(plugin, this);
     }
-    public void reload() {
+    //#region load
+    public void loadChallenges() {
 
         if (!file.exists()) {
             plugin.saveResource("challenges.yml", false);
@@ -52,20 +67,164 @@ public class ChallengeManager {
                 plugin.getLogger().severe("Invalid challenge type: " + config.getString(path + ".type"));
                 continue;
             }
-            int amount = config.getInt(path + ".amount",100);
+            int amount = config.getInt(path + ".amount",10);
             String name = config.getString(path + ".name","Challenge");
+            String desc = config.getString(path + ".description","No description found");
             List<String> rewards = config.getStringList(path + ".rewards");
 
-            int players = Bukkit.getOnlinePlayers().size();
-
-            challenges.add(new Challenge(type, amount+(players*amount), name, rewards));
+            challenges.add(new Challenge(name, desc, type, amount, rewards, Type.UNASSIGNED, null, null, null));
         }
     }
 
-    public Challenge getRandomChallenge(Mode type) {
+    //#region startGlobal
+    public void startGlobalChallenge(Mode type) {
+        Challenge base = getRandomChallenge(type);
+        if (base == null) {
+            plugin.getLogger().severe("No challenges found for type: " + type.name());
+            return;
+        }
+        List<Player> players = new ArrayList<>();
+        Bukkit.getOnlinePlayers().forEach(p -> {   
+            players.add(p);
+            p.sendMessage(plugin.getLangManager().getLang("challenge.start", p).replace("{name}", base.getName()));
+            p.sendMessage("");
+        });
+
+        Challenge currentChallenge = new Challenge(base.getName(), base.getDescription(), base.getMode(), base.getAmount()*players.size(), base.getRewards(), Type.GLOBAL, players, null, null);
+        globalChallenges.add(currentChallenge);
+
+        plugin.getScoreBoard().setChallenge(currentChallenge.getName());
+        plugin.getScoreBoard().setCount("0/"+currentChallenge.getAmount());
+        
+    }
+    //#region startRace
+    public void startRaceChallenge(Mode type) {
+        Challenge base = getRandomChallenge(type);
+        if (base == null) {
+            plugin.getLogger().severe("No challenges found for type: " + type.name());
+            return;
+        }
+
+        Bukkit.getOnlinePlayers().forEach(p -> {   
+            p.sendMessage(plugin.getLangManager().getLang("challenge.race", p).replace("{name}", base.getName()));
+            p.sendMessage("");
+        });
+
+        Challenge currentChallenge = new Challenge(base.getName(), base.getDescription(), base.getMode(), base.getAmount(), base.getRewards(), Type.RACE, new ArrayList<>(), getRandomEntityType(base.getMode()), getRandomMaterial(base.getMode()));
+        raceChallenges.add(currentChallenge);
+    }
+    public void increaseProgress(Mode mode, Player player, EntityType entityType, Material material) {
+        checkGlobalChallenges(mode, player, entityType, material);
+        checkSoloChallenges(mode, player, entityType, material);
+        checkRaceChallenges(mode, player, entityType, material);
+    }  
+    //#region add
+    public void addSoloChallenge(Player player, Mode mode) {
+        List<Challenge> challenges = soloChallenges.getOrDefault(player, new ArrayList<>());
+        Challenge base = getRandomChallenge(mode);
+        if (base == null) {
+            plugin.getLogger().severe("No challenges found for type: " + plugin.getManager().getRandomMode().name());
+            return;
+        }
+        List<Player> players = new ArrayList<>();
+        players.add(player);
+        Challenge newChallenge = new Challenge(base.getName(), base.getDescription(), base.getMode(), base.getAmount(), base.getRewards(), Type.SOLO, players, getRandomEntityType(base.getMode()), getRandomMaterial(base.getMode()));
+        challenges.add(newChallenge);
+        soloChallenges.put(player, challenges);
+
+        player.sendMessage(plugin.getLangManager().getLang("challenge.solo", player).replace("{name}", newChallenge.getName()));
+        player.sendMessage("");
+    }
+    //#region check
+    private void checkGlobalChallenges(Mode mode, Player player, EntityType entityType, Material material) {
+        if (globalChallenges.isEmpty()) {
+            return;
+        }
+        
+        Iterator<Challenge> iterator = globalChallenges.iterator();
+        while (iterator.hasNext()) {
+            Challenge challenge = iterator.next();
+    
+            if (challenge.isCompleted() || challenge.getMode() != mode || !challenge.getPlayers().contains(player)) {
+                continue;
+            }
+    
+            challenge.setProgress(challenge.getProgress() + 1);
+    
+            if (challenge.getProgress() >= challenge.getAmount()) {
+                challenge.setCompleted(true);
+                challenge.proccesRewards();
+                iterator.remove();
+                plugin.getScoreBoard().setChallenge("");
+                plugin.getScoreBoard().setCount("");
+            } else {
+                plugin.getScoreBoard().setCount(challenge.getProgress() + "/" + challenge.getAmount());
+            }
+        }
+    }
+    private void checkSoloChallenges(Mode mode, Player player, EntityType entityType, Material material) {
+        List<Challenge> challengs = soloChallenges.getOrDefault(player, new ArrayList<>());
+        if (challengs.isEmpty()) {
+            return;
+        }
+        Iterator<Challenge> iterator = challenges.iterator();
+        while (iterator.hasNext()) {
+            Challenge challenge = iterator.next();
+            if (challenge.isCompleted() || challenge.getMode() != mode) continue;
+    
+            if (validateChallengeType(challenge, mode, entityType, material)) {
+                challenge.setProgress(challenge.getProgress() + 1);
+            }
+    
+            if (challenge.getProgress() >= challenge.getAmount()) {
+                challenge.setCompleted(true);
+                challenge.proccesRewards();
+                iterator.remove();
+            }
+        }
+    }
+    private void checkRaceChallenges(Mode mode, Player player, EntityType entityType, Material material) {
+        if (raceChallenges.isEmpty()) {
+            return;
+        }
+        Iterator<Challenge> iterator = raceChallenges.iterator();
+        while (iterator.hasNext()) {
+            Challenge challenge = iterator.next();
+            if (challenge.isCompleted() || challenge.getMode() != mode) continue;
+    
+            if (validateChallengeType(challenge, mode, entityType, material)) {
+                challenge.increaseProgress(player);
+            }    
+    
+            if (challenge.getPlayerProgress().getOrDefault(player, 0) >= challenge.getAmount()) {
+                challenge.setCompleted(true);
+                challenge.getPlayers().add(player);
+                challenge.proccesRewards();
+                Bukkit.getOnlinePlayers().forEach(pl ->
+                    pl.sendMessage(plugin.getLangManager().getLang("challenge.completed", pl).replace("{name}", challenge.getName()))
+                );
+                iterator.remove();
+            }
+        }
+    }
+    private boolean validateChallengeType(Challenge challenge, Mode mode, EntityType entityType, Material material) {
+        switch (mode) {
+            case MINING:
+            case WOODCUTTING:
+                return challenge.getMaterial() == null || challenge.getMaterial() == material;
+            case FISHING:
+            case HUNTING_ANIMALS:
+            case HUNTING_ENEMYS:
+                return challenge.getEntityType() == null || challenge.getEntityType() == entityType;
+            default:
+                return true;
+        }
+    }
+    //#region getRandom
+    public Challenge getRandomChallenge(Mode mode) {
         List<Challenge> challengesOfType = new ArrayList<>();
         for (Challenge challenge : challenges) {
-            if (challenge.getType() == type) {
+            if (challenge.getMode() == mode) {
                 challengesOfType.add(challenge);
             }
         }
@@ -74,56 +233,45 @@ public class ChallengeManager {
         }
         return challengesOfType.get((int) (Math.random() * challengesOfType.size()));
     }
+    public EntityType getRandomEntityType(Mode mode) {
+        if (mode == Mode.HUNTING_ANIMALS) {
+            EntityType[] animals = new EntityType[] {EntityType.COW, EntityType.PIG, EntityType.SHEEP, EntityType.CHICKEN,
+                 EntityType.RABBIT};
+            return animals[(int) (Math.random() * animals.length)];
 
-    private Challenge currentChallenge;
-    public Challenge getCurrentChallenge() {
-        return currentChallenge;
+        }
+        if (mode == Mode.HUNTING_ENEMYS) {
+            EntityType[] enemys = new EntityType[] {EntityType.ZOMBIE, EntityType.SKELETON, EntityType.CREEPER, EntityType.SPIDER, EntityType.ENDERMAN
+                    , EntityType.BLAZE, EntityType.GHAST, EntityType.GUARDIAN, EntityType.SLIME, EntityType.MAGMA_CUBE, EntityType.WITHER_SKELETON,
+                    EntityType.SHULKER, EntityType.STRAY, EntityType.HUSK, EntityType.PILLAGER};
+            return enemys[(int) (Math.random() * enemys.length)];
+        }
+        return null;
     }
+    public Material getRandomMaterial(Mode mode) {
+        String key = mode.toString().toLowerCase();
+        List<String> materials = plugin.getConfig().getStringList("modes."+key+".items");
 
+        if (materials.isEmpty()) {
+            return null;
+        }
+        try {
+            return Material.valueOf(materials.get((int) (Math.random() * materials.size())));
+        } catch (IllegalArgumentException e) {
+            return null;
+        }
+    }
+    //#region getters
     public List<Challenge> getChallenges() {
         return challenges;
     }
-
-    public void startGlobalChallenge(Mode type) {
-        currentChallenge = getRandomChallenge(type);
-        if (currentChallenge == null) {
-            plugin.getScoreBoard().setChallenge("-");
-            plugin.getScoreBoard().setCount("-");
-            plugin.getLogger().severe("No challenges found for type: " + type.name());
-            return;
-        }
-
-        for (Player p : Bukkit.getOnlinePlayers()){
-            p.sendMessage(plugin.getLangManager().getLang("challenge.start", p).replace("{name}", currentChallenge.getName()));
-            p.sendMessage("");
-        }
-        currentChallenge.setProgress(0);
-        plugin.getScoreBoard().setChallenge(currentChallenge.getName());
-        plugin.getScoreBoard().setCount("0/"+currentChallenge.getAmount());
-        
+    public List<Challenge> getGlobalChallenges() {
+        return globalChallenges;
     }
-    public void increaseProgress(Mode mode){
-        if (getCurrentChallenge().getType() == mode) {
-
-            Challenge challenge = getCurrentChallenge();
-
-            if (challenge != null) {
-                if (challenge.isCompleted()){
-                    return;
-                }
-                int progress = challenge.getProgress();
-                challenge.setProgress(progress + 1);
-                // if (challenge.getPlayers()){
-
-                // }
-                plugin.getScoreBoard().setCount(progress + 1 + "/" + challenge.getAmount());
-
-                if (challenge.getProgress() >= challenge.getAmount()) {
-                    plugin.getScoreBoard().setCount("Completed");
-                    challenge.proccesRewards();
-                    challenge.setCompleted(true);
-                }
-            }
-        }
-    }  
+    public HashMap<Player, List<Challenge>> getSoloChallenges() {
+        return soloChallenges;
+    }
+    public List<Challenge> getRaceChallenges() {
+        return raceChallenges;
+    }
 }

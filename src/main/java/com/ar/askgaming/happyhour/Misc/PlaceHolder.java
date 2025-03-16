@@ -13,7 +13,7 @@ public class PlaceHolder extends PlaceholderExpansion{
     public PlaceHolder(HHPlugin main){
         plugin = main;
     }
-
+        
     @Override
     public String onRequest(OfflinePlayer player, String params) {
 
@@ -52,5 +52,8 @@ public class PlaceHolder extends PlaceholderExpansion{
     public String getVersion() {
         return "1.0.0";
     }
+    
+
+    
     
 }

@@ -24,28 +24,42 @@ public class Hunting implements Listener{
 
         plugin.getServer().getPluginManager().registerEvents(this, plugin);
     }
-    @EventHandler
-    public void onKill(EntityDeathEvent e){
+    public void onKill(EntityDeathEvent e) {
+        Entity entity = e.getEntity();
+        
         if (!(e.getEntity().getKiller() instanceof Player)) {
             return;
         }
+    
+        Player player = e.getEntity().getKiller();
+        
+        if (entity instanceof Animals) {
+            plugin.getChallengeManager().increaseProgress(Mode.HUNTING_ANIMALS, player, entity.getType(), null);
+        } else if (entity instanceof Enemy) {
+            plugin.getChallengeManager().increaseProgress(Mode.HUNTING_ENEMYS, player, entity.getType(), null);
+        }
+    
+        
         List<HappyHour> activeHappyHours = plugin.getManager().getActiveHappyHours();
         if (activeHappyHours.isEmpty()) {
             return;
         }
+    
+        List<ItemStack> drops = e.getDrops();
         for (HappyHour hh : activeHappyHours) {
-            List<ItemStack> drops = e.getDrops();
-            Entity type = e.getEntity();
-            if ((hh.getActualMode() == Mode.HUNTING_ANIMALS || hh.getActualMode() == Mode.ALL) && type instanceof Animals) {
-                applyMultiplier(drops, "modes.hunting_animals.chance", "modes.hunting_animals.multiplier", type.getLocation());
-                plugin.getChallengeManager().increaseProgress(Mode.HUNTING_ANIMALS);
-            } else if ((hh.getActualMode() == Mode.HUNTING_ENEMYS || hh.getActualMode() == Mode.ALL) && type instanceof Enemy) {
-                applyMultiplier(drops, "modes.hunting_enemys.chance", "modes.hunting_enemys.multiplier", type.getLocation());
-                plugin.getChallengeManager().increaseProgress(Mode.HUNTING_ENEMYS);
+            Mode mode = hh.getActualMode();
+            
+            if (entity instanceof Animals && (mode == Mode.HUNTING_ANIMALS || mode == Mode.ALL)) {
+                applyMultiplier(drops, "modes.hunting_animals.chance", "modes.hunting_animals.multiplier", entity.getLocation());
+                break; 
+            }
+            if (entity instanceof Enemy && (mode == Mode.HUNTING_ENEMYS || mode == Mode.ALL)) {
+                applyMultiplier(drops, "modes.hunting_enemys.chance", "modes.hunting_enemys.multiplier", entity.getLocation());
+                break; 
             }
         }
     }
-        
+    
     private void applyMultiplier(List<ItemStack> drops, String chanceKey, String multiplierKey, Location loc) {
         double chance = plugin.getConfig().getDouble(chanceKey);
         double multiplier = plugin.getConfig().getDouble(multiplierKey);

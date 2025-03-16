@@ -33,6 +33,8 @@ all:
 
 challenge:
   start: "&7¡Desafío global iniciado: &6{name}, complétalo para obtener recompensas!"
+  race: "&7¡Desafío de carrera iniciado: &6{name}, el primero en completarlo obtendrá recompensas!"
+  solo: "&7¡Nuevo desafio individual agregado: &6{name}."
 
 help:
 - "&7/happyhour start <mode> <time_minutes> &8- &7Iniciar una hora feliz."

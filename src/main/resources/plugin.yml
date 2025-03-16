@@ -12,3 +12,8 @@ commands:
     permission: happyhour.status
     aliases:
     - hh
+  challenge:
+    description: Challenges command.
+    usage: /challenge <start|add> 
+    permission: happyhour.challenges
+    aliases: [ch, challenges]

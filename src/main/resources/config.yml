@@ -61,7 +61,6 @@ modes:
     - NETHER_STAR
     - WITHER_SKELETON_SKULL
     - OMINOUS_BOTTLE
-    
   experience:
     multiplier: 2
     chance: 0.7
