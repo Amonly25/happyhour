@@ -2,6 +2,8 @@ package com.ar.askgaming.happyhour.Challenges;
 
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map.Entry;
+import java.util.Optional;
 import java.util.UUID;
 
 import org.bukkit.Bukkit;
@@ -100,11 +102,33 @@ public class Challenge {
     public HashMap<UUID, Integer> getPlayerProgress() {
         return playerProgress;
     }
-    public void increaseProgress(Player player) {
+    public Integer increaseProgress(Player player) {
         if (playerProgress.containsKey(player.getUniqueId())) {
-            playerProgress.put(player.getUniqueId(), playerProgress.get(player.getUniqueId()) + 1);
+            int newProgress = playerProgress.get(player.getUniqueId()) + 1;
+            playerProgress.put(player.getUniqueId(), newProgress);
+            return newProgress;
         } else {
             playerProgress.put(player.getUniqueId(), 1);
+            return 1;
+        }
+    }
+    public String getWinningPlayer() {
+        if (playerProgress.isEmpty()) {
+            return "No one";
+        }
+    
+        // Ordenamos el mapa por los valores (progreso) de mayor a menor
+        Optional<Entry<UUID, Integer>> maxEntry = playerProgress.entrySet()
+            .stream()
+            .max(Entry.comparingByValue());
+    
+        // Verificamos si maxEntry está presente
+        if (maxEntry.isPresent()) {
+            String winner = Bukkit.getOfflinePlayer(maxEntry.get().getKey()).getName();
+            String value = maxEntry.get().getValue().toString();
+            return winner + ": " + value + "/" + amount;
+        } else {
+            return "No one";  // En caso de que maxEntry esté vacío
         }
     }
 }

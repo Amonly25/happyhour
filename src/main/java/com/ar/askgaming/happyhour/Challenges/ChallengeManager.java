@@ -144,13 +144,13 @@ public class ChallengeManager {
         Iterator<Challenge> iterator = globalChallenges.iterator();
         while (iterator.hasNext()) {
             Challenge challenge = iterator.next();
-    
+            plugin.getLogger().info("Challenge: " + challenge.getName());
             if (challenge.isCompleted() || challenge.getMode() != mode || !challenge.getPlayers().contains(player)) {
                 continue;
             }
-    
+            
             challenge.setProgress(challenge.getProgress() + 1);
-    
+            player.sendMessage(plugin.getLangManager().getLang("challenge.progress", player).replace("{name}", challenge.getName()).replace("{progress}", challenge.getProgress() + "/" + challenge.getAmount()));
             if (challenge.getProgress() >= challenge.getAmount()) {
                 challenge.setCompleted(true);
                 challenge.proccesRewards();
@@ -163,23 +163,29 @@ public class ChallengeManager {
         }
     }
     private void checkSoloChallenges(Mode mode, Player player, EntityType entityType, Material material) {
-        List<Challenge> challengs = soloChallenges.getOrDefault(player, new ArrayList<>());
-        if (challengs.isEmpty()) {
+        List<Challenge> playerChallenges = soloChallenges.getOrDefault(player, new ArrayList<>());
+        if (playerChallenges.isEmpty()) {
+            plugin.getLogger().info("No solo challenges found for player: " + player.getName());
             return;
         }
-        Iterator<Challenge> iterator = challenges.iterator();
+        Iterator<Challenge> iterator = playerChallenges.iterator();
         while (iterator.hasNext()) {
             Challenge challenge = iterator.next();
             if (challenge.isCompleted() || challenge.getMode() != mode) continue;
+            plugin.getLogger().info("Challenge: " + challenge.getName());
     
             if (validateChallengeType(challenge, mode, entityType, material)) {
                 challenge.setProgress(challenge.getProgress() + 1);
+                plugin.getLogger().info("Progress: " + challenge.getProgress());
+                player.sendMessage(plugin.getLangManager().getLang("challenge.progress", player).replace("{name}", challenge.getName()).replace("{progress}", challenge.getProgress() + "/" + challenge.getAmount()));
             }
     
             if (challenge.getProgress() >= challenge.getAmount()) {
+                plugin.getLogger().info("Challenge completed");
                 challenge.setCompleted(true);
                 challenge.proccesRewards();
                 iterator.remove();
+                player.sendMessage(plugin.getLangManager().getLang("challenge.completed", player).replace("{name}", challenge.getName()));
             }
         }
     }
@@ -191,9 +197,10 @@ public class ChallengeManager {
         while (iterator.hasNext()) {
             Challenge challenge = iterator.next();
             if (challenge.isCompleted() || challenge.getMode() != mode) continue;
-    
+            plugin.getLogger().info("Challenge: " + challenge.getName());
             if (validateChallengeType(challenge, mode, entityType, material)) {
-                challenge.increaseProgress(player);
+                Integer progress = challenge.increaseProgress(player);
+                player.sendMessage(plugin.getLangManager().getLang("challenge.progress", player).replace("{name}", challenge.getName()).replace("{progress}", progress + "/" + challenge.getAmount()));
             }    
     
             if (challenge.getPlayerProgress().getOrDefault(player, 0) >= challenge.getAmount()) {

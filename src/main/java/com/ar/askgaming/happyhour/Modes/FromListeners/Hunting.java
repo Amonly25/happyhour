@@ -24,6 +24,7 @@ public class Hunting implements Listener{
 
         plugin.getServer().getPluginManager().registerEvents(this, plugin);
     }
+    @EventHandler
     public void onKill(EntityDeathEvent e) {
         Entity entity = e.getEntity();
         
@@ -39,7 +40,6 @@ public class Hunting implements Listener{
             plugin.getChallengeManager().increaseProgress(Mode.HUNTING_ENEMYS, player, entity.getType(), null);
         }
     
-        
         List<HappyHour> activeHappyHours = plugin.getManager().getActiveHappyHours();
         if (activeHappyHours.isEmpty()) {
             return;

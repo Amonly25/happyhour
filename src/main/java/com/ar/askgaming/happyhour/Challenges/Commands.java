@@ -9,6 +9,7 @@ import org.bukkit.entity.Player;
 
 import com.ar.askgaming.happyhour.HHManager.Mode;
 import com.ar.askgaming.happyhour.HHPlugin;
+import com.ar.askgaming.happyhour.Challenges.ChallengeManager.Type;
 
 import net.md_5.bungee.api.chat.HoverEvent;
 import net.md_5.bungee.api.chat.TextComponent;
@@ -147,7 +148,11 @@ public class Commands implements TabExecutor {
         if (challenge.getMaterial() != null) {
             sb.append("Material: ").append(challenge.getMaterial()).append("\n");
         }
-        sb.append("Progress: " + challenge.getProgress() + "/" + challenge.getAmount());
+        if (challenge.getType() == Type.RACE){  
+            sb.append("Winn: " + challenge.getWinningPlayer());
+
+        }else sb.append("Progress: " + challenge.getProgress() + "/" + challenge.getAmount());
+
         clickableText.setHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, new Text(sb.toString())));
 
         message.addExtra(clickableText);
