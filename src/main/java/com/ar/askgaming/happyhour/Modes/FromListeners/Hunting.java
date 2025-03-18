@@ -14,6 +14,7 @@ import org.bukkit.inventory.ItemStack;
 
 import com.ar.askgaming.happyhour.HHPlugin;
 import com.ar.askgaming.happyhour.HappyHour;
+import com.ar.askgaming.happyhour.Challenges.ChallengeManager;
 import com.ar.askgaming.happyhour.HHManager.Mode;
 
 public class Hunting implements Listener{
@@ -35,9 +36,9 @@ public class Hunting implements Listener{
         Player player = e.getEntity().getKiller();
         
         if (entity instanceof Animals) {
-            plugin.getChallengeManager().increaseProgress(Mode.HUNTING_ANIMALS, player, entity.getType(), null);
+            plugin.getChallengeManager().increaseProgress(ChallengeManager.Mode.HUNTING_ANIMALS, player, entity.getType(), null);
         } else if (entity instanceof Enemy) {
-            plugin.getChallengeManager().increaseProgress(Mode.HUNTING_ENEMYS, player, entity.getType(), null);
+            plugin.getChallengeManager().increaseProgress(ChallengeManager.Mode.HUNTING_ENEMYS, player, entity.getType(), null);
         }
     
         List<HappyHour> activeHappyHours = plugin.getManager().getActiveHappyHours();

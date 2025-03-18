@@ -1,14 +1,16 @@
 package com.ar.askgaming.happyhour.Challenges;
 
+import java.util.ArrayList;
 import java.util.List;
 
+import org.bukkit.Color;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.command.TabExecutor;
 import org.bukkit.entity.Player;
 
-import com.ar.askgaming.happyhour.HHManager.Mode;
 import com.ar.askgaming.happyhour.HHPlugin;
+import com.ar.askgaming.happyhour.Challenges.ChallengeManager.Mode;
 import com.ar.askgaming.happyhour.Challenges.ChallengeManager.Type;
 
 import net.md_5.bungee.api.chat.HoverEvent;
@@ -26,6 +28,10 @@ public class Commands implements TabExecutor {
         plugin.getServer().getPluginCommand("challenge").setExecutor(this);
     }
 
+    private String getLang(String key, Player player) {
+        return plugin.getLangManager().getLang(key, player);
+    }
+
     @Override
     public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
         if (args.length == 0) {
@@ -40,6 +46,10 @@ public class Commands implements TabExecutor {
                 return true;
             case "list":
                 list(sender,args);
+                break;
+            case "get":
+                get(sender,args);
+                break;
             default:
                 break;
         }
@@ -49,7 +59,14 @@ public class Commands implements TabExecutor {
     @Override
     public List<String> onTabComplete(CommandSender sender, Command command, String alias, String[] args) {
         if (args.length == 1) {
-            return List.of("start", "add");
+            List<String> list = new ArrayList<>();
+            list.add("list");
+            list.add("get");
+            if (sender.hasPermission("challenge.admin")) {
+                list.add("start");
+                list.add("add");
+            }
+            return list;
         }
         if (args.length == 2 && args[0].equalsIgnoreCase("start")) {
             return List.of("global","race");    
@@ -62,8 +79,12 @@ public class Commands implements TabExecutor {
             sender.sendMessage("Usage: /challenge start <global/race>");
             return;
         }
+        if (!sender.hasPermission("challenge.admin")) {
+            sender.sendMessage("You don't have permission to use this command");
+            return;
+        }
 
-        Mode mode = plugin.getManager().getRandomMode();
+        Mode mode = manager.getRandomMode();
 
         switch (args[1].toLowerCase()) {
             case "global":
@@ -87,7 +108,11 @@ public class Commands implements TabExecutor {
             sender.sendMessage("Player not found");
             return;
         }
-        Mode mode = plugin.getManager().getRandomMode();
+        if (!sender.hasPermission("challenge.admin")) {
+            sender.sendMessage("You don't have permission to use this command");
+            return;
+        }
+        Mode mode = manager.getRandomMode();
         manager.addSoloChallenge(player, mode);
         sender.sendMessage("Challenge added");
         
@@ -100,24 +125,24 @@ public class Commands implements TabExecutor {
         }
         Player player = (Player) sender;
         if (args.length == 1) {
-            player.sendMessage("Challenges availables:");
+            player.sendMessage(getLang("challenge.available", player));
             List<Challenge> challenges = manager.getGlobalChallenges();
             if (!challenges.isEmpty()) {
-                player.sendMessage("Global challenges:");
+                player.sendMessage(getLang("challenge.global_available", player));
                 for (Challenge challenge : challenges) {
                     sendChallegeHoverTextMessage(player, challenge);
                 }
             }
             List<Challenge> raceChallenges = manager.getRaceChallenges();
             if (!raceChallenges.isEmpty()) {
-                player.sendMessage("Race challenges:");
+                player.sendMessage(getLang("challenge.race_available", player));
                 for (Challenge challenge : raceChallenges) {
                     sendChallegeHoverTextMessage(player, challenge);
                 }
             }
             List<Challenge> soloChallenges = manager.getSoloChallenges().get(player);
             if (soloChallenges != null && !soloChallenges.isEmpty()) {
-                player.sendMessage("Solo challenges:");
+                player.sendMessage(getLang("challenge.solo_available", player));
                 for (Challenge challenge : soloChallenges) {
                     sendChallegeHoverTextMessage(player, challenge);
                 }
@@ -128,11 +153,32 @@ public class Commands implements TabExecutor {
             return;
         }
     }
+    //#region get   
+    private void get(CommandSender sender, String[] args) {
+        if (!(sender instanceof Player)) {
+            sender.sendMessage("Only players can use this command");
+            return;
+        }
+        Player player = (Player) sender;
+        if (args.length < 1) {
+            player.sendMessage("Usage: /challenge get");
+            return;
+        }
+        Integer current = manager.getSoloChallenges().get(player).size();
+        Integer max = manager.getMaxChallenges(player);
+        if (current >= max) {
+            player.sendMessage(plugin.getLangManager().getLang("challenge.max", player));
+            return;
+        }
+        Mode mode = manager.getRandomMode();
+        manager.addSoloChallenge(player, mode);
+    }
     //#region sendText
     private void sendChallegeHoverTextMessage(Player player, Challenge challenge) {
-        TextComponent message = new TextComponent(challenge.getName());
+        Color color = challenge.isCompleted() ? Color.GREEN : Color.GRAY;
+        TextComponent message = new TextComponent(color + challenge.getName());
 
-        String click = " (Info)";
+        String click = getLang("challenge.info.info", player);
 
         TextComponent clickableText = new TextComponent(click);
 
@@ -140,18 +186,18 @@ public class Commands implements TabExecutor {
         sb.append(challenge.getDescription());
         sb.append("\n");
         String name = plugin.getLangManager().getLang(challenge.getMode().name().toLowerCase()+".name", player);
-        sb.append("Mode: " + name);
+        sb.append(getLang("challenge.info.mode", player) + name);
         sb.append("\n");
         if (challenge.getEntityType() != null) {
-            sb.append("Type: ").append(challenge.getEntityType()).append("\n");
+            sb.append(getLang("challenge.info.type", player) + challenge.getEntityType()).append("\n");
         }
         if (challenge.getMaterial() != null) {
-            sb.append("Material: ").append(challenge.getMaterial()).append("\n");
+            sb.append(getLang("challenge.info.material", player) + challenge.getMaterial()).append("\n");
         }
         if (challenge.getType() == Type.RACE){  
-            sb.append("Winn: " + challenge.getWinningPlayer());
+            sb.append(getLang("challenge.info.winning", player) + challenge.getWinningPlayer());
 
-        }else sb.append("Progress: " + challenge.getProgress() + "/" + challenge.getAmount());
+        }else sb.append(getLang("challenge.info.progress", player) + challenge.getProgress() + "/" + challenge.getAmount());
 
         clickableText.setHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, new Text(sb.toString())));
 

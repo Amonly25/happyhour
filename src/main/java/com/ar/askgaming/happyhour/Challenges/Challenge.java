@@ -2,19 +2,21 @@ package com.ar.askgaming.happyhour.Challenges;
 
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Optional;
 import java.util.UUID;
 
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
+import org.bukkit.configuration.serialization.ConfigurationSerializable;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
 
-import com.ar.askgaming.happyhour.HHManager.Mode;
+import com.ar.askgaming.happyhour.Challenges.ChallengeManager.Mode;
 import com.ar.askgaming.happyhour.Challenges.ChallengeManager.Type;
 
-public class Challenge {
+public class Challenge implements ConfigurationSerializable{
 
     private Mode mode;
     private Type type;
@@ -28,6 +30,7 @@ public class Challenge {
     private List<Player> players;
     private String decription;
     private HashMap<UUID, Integer> playerProgress = new HashMap<>();
+    private long completedTime;
 
     public Challenge(String displayName, String desc, Mode mode, int amount, List<String> rewards, Type type, List<Player> players, EntityType entityType, Material material) {
         this.decription = desc;
@@ -39,6 +42,20 @@ public class Challenge {
         this.players = players;
         this.entityType = entityType;
         this.material = material;
+    }
+    public Challenge(Map<String, Object> map) {
+        this.mode = Mode.valueOf((String) map.get("mode"));
+        this.type = Type.valueOf((String) map.get("type"));
+        this.amount = (int) map.get("amount");
+        this.progress = (int) map.get("progress");
+        this.completed = (boolean) map.get("completed");
+        this.name = (String) map.get("name");
+        this.rewards = (List<String>) map.get("rewards");
+        this.players = (List<Player>) map.get("players");
+        this.decription = (String) map.get("description");
+        this.entityType = EntityType.valueOf((String) map.get("entityType"));
+        this.material = Material.valueOf((String) map.get("material"));
+        this.completedTime = ((Number) map.get("timeleft")).longValue();
     }
     public void proccesRewards(){
         for (String reward : rewards) {
@@ -130,5 +147,28 @@ public class Challenge {
         } else {
             return "No one";  // En caso de que maxEntry esté vacío
         }
+    }
+    @Override
+    public Map<String, Object> serialize() {
+        Map<String, Object> map = new HashMap<>();
+        map.put("mode", mode.toString());
+        map.put("type", type.toString());
+        map.put("amount", amount);
+        map.put("progress", progress);
+        map.put("completed", completed);
+        map.put("name", name);
+        map.put("rewards", rewards);
+        map.put("players", players);
+        map.put("description", decription);
+        map.put("entityType", entityType.toString());
+        map.put("material", material.toString());
+        map.put("completedTime", completedTime);
+        return map;
+    }
+    public long getCompletedTime() {
+        return completedTime;
+    }
+    public void setCompletedTime(long completedTime) {
+        this.completedTime = completedTime;
     }
 }

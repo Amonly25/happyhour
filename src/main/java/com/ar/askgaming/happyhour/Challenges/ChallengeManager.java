@@ -9,20 +9,20 @@ import java.util.Set;
 
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
+import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
 
-import com.ar.askgaming.happyhour.HHManager.Mode;
 import com.ar.askgaming.happyhour.HHPlugin;
 
 public class ChallengeManager {
 
-    private File file;
-    private FileConfiguration config;
+    private File file, playerFile;
+    private FileConfiguration config, playerConfig;
     
-    private List<Challenge> challenges = new ArrayList<>();
+    private List<Challenge> baseChallenges = new ArrayList<>();
 
     private List<Challenge> globalChallenges = new ArrayList<>();
     private HashMap<Player, List<Challenge>> soloChallenges = new HashMap<>();
@@ -34,6 +34,14 @@ public class ChallengeManager {
         RACE,
         UNASSIGNED
     }
+    public enum Mode{
+        MINING,
+        WOODCUTTING,
+        FISHING,
+        HUNTING_ANIMALS,
+        HUNTING_ENEMYS,
+        VOTIFIER,
+    }
 
     private HHPlugin plugin;
     public ChallengeManager(HHPlugin plugin) {
@@ -43,7 +51,59 @@ public class ChallengeManager {
         loadChallenges();
 
         new Commands(plugin, this);
+
+        playerFile = new File(plugin.getDataFolder(), "data.yml");
+        loadPlayerData();
+
+        new ControlTask(plugin);
+        
     }
+    public void loadPlayerData() {
+        if (!playerFile.exists()) {
+            plugin.saveResource("data.yml", false);
+        }
+        playerConfig = YamlConfiguration.loadConfiguration(playerFile);
+        Bukkit.getOnlinePlayers().forEach(p -> loadPlayerChallenges(p));
+    }
+
+    public void loadPlayerChallenges(Player player) {
+        List<Challenge> loading = new ArrayList<>();
+        ConfigurationSection section = playerConfig.getConfigurationSection(player.getUniqueId().toString());
+        if (section != null) {
+            Set<String> keys = section.getKeys(false);
+            for (String key : keys) {
+                ConfigurationSection challengeSection = section.getConfigurationSection(key);
+                if (challengeSection == null) {
+                    continue;
+                }
+                Challenge challenge = new Challenge(challengeSection.getValues(false));
+                loading.add(challenge);
+            }
+        }
+
+        soloChallenges.put(player, loading);
+        int current = loading.size();
+        int max = getMaxChallenges(player);
+        if (current < max) {
+            player.sendMessage(plugin.getLangManager().getLang("challenge.new_space", player));
+        }
+    }
+
+    public void savePlayerData() {
+        try {
+            playerConfig.save(playerFile);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+    public void savePlayerChallenges(Player player) {
+        List<Challenge> list = soloChallenges.getOrDefault(player, new ArrayList<>());
+        ConfigurationSection section = playerConfig.createSection(player.getUniqueId().toString());
+        for (int i = 0; i < list.size(); i++) {
+            section.createSection(i + "", list.get(i).serialize());
+        }
+    }
+
     //#region load
     public void loadChallenges() {
 
@@ -72,8 +132,11 @@ public class ChallengeManager {
             String desc = config.getString(path + ".description","No description found");
             List<String> rewards = config.getStringList(path + ".rewards");
 
-            challenges.add(new Challenge(name, desc, type, amount, rewards, Type.UNASSIGNED, null, null, null));
+            baseChallenges.add(new Challenge(name, desc, type, amount, rewards, Type.UNASSIGNED, null, null, null));
         }
+    }
+    public Mode getRandomMode(){
+        return Mode.values()[(int) (Math.random() * Mode.values().length)];
     }
 
     //#region startGlobal
@@ -184,7 +247,6 @@ public class ChallengeManager {
                 plugin.getLogger().info("Challenge completed");
                 challenge.setCompleted(true);
                 challenge.proccesRewards();
-                iterator.remove();
                 player.sendMessage(plugin.getLangManager().getLang("challenge.completed", player).replace("{name}", challenge.getName()));
             }
         }
@@ -230,7 +292,7 @@ public class ChallengeManager {
     //#region getRandom
     public Challenge getRandomChallenge(Mode mode) {
         List<Challenge> challengesOfType = new ArrayList<>();
-        for (Challenge challenge : challenges) {
+        for (Challenge challenge : baseChallenges) {
             if (challenge.getMode() == mode) {
                 challengesOfType.add(challenge);
             }
@@ -269,8 +331,8 @@ public class ChallengeManager {
         }
     }
     //#region getters
-    public List<Challenge> getChallenges() {
-        return challenges;
+    public List<Challenge> getBaseChallenges() {
+        return baseChallenges;
     }
     public List<Challenge> getGlobalChallenges() {
         return globalChallenges;
@@ -280,5 +342,15 @@ public class ChallengeManager {
     }
     public List<Challenge> getRaceChallenges() {
         return raceChallenges;
+    }
+    public Integer getMaxChallenges(Player player) {
+        int actual = 0;
+        for (int i = 0; i < 100; i++) {
+            String permission = "challenges.max." + i;
+            if (player.hasPermission(permission)) {
+                actual = i;
+            }
+        }
+        return actual;
     }
 }

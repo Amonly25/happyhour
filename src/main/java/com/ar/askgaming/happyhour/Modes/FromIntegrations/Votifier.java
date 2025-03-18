@@ -11,6 +11,7 @@ import org.bukkit.event.Listener;
 
 import com.ar.askgaming.happyhour.HHPlugin;
 import com.ar.askgaming.happyhour.HappyHour;
+import com.ar.askgaming.happyhour.Challenges.ChallengeManager;
 import com.ar.askgaming.happyhour.HHManager.Mode;
 import com.vexsoftware.votifier.model.VotifierEvent;
 
@@ -32,7 +33,7 @@ public class Votifier implements Listener {
             return;
         }
 
-        plugin.getChallengeManager().increaseProgress(Mode.VOTIFIER, player, null, null);
+        plugin.getChallengeManager().increaseProgress(ChallengeManager.Mode.VOTIFIER, player, null, null);
 
         List<HappyHour> activeHappyHours = plugin.getManager().getActiveHappyHours();
         if (activeHappyHours.isEmpty()) {

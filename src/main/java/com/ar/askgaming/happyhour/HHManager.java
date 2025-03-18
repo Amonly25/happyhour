@@ -17,6 +17,7 @@ import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.entity.Player;
 import org.bukkit.scheduler.BukkitRunnable;
 
+import com.ar.askgaming.happyhour.Challenges.ChallengeManager;
 import com.ar.askgaming.happyhour.Events.HappyHourStartEvent;
 
 import net.md_5.bungee.api.ChatColor;
@@ -80,7 +81,11 @@ public class HHManager extends BukkitRunnable{
             pl.sendMessage(plugin.getLangManager().getLang("start", pl).replace("{mode}", name));
             pl.sendMessage(ChatColor.translateAlternateColorCodes('&', descriptionMsg));
         }
-        plugin.getChallengeManager().startGlobalChallenge(mode);
+        try {
+            plugin.getChallengeManager().startGlobalChallenge(ChallengeManager.Mode.valueOf(mode.name()));
+        } catch (Exception e) {
+            plugin.getLogger().severe("No challenge found for mode " + mode.name());
+        }
         plugin.getLogger().info("Happy hour started: " + hh.getDisplayName());      
     }
 

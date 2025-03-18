@@ -37,6 +37,19 @@ challenge:
   solo: "&7¡Nuevo desafio individual agregado: &6{name}."
   completed: "&7¡Desafío completado: &6{name}, felicidades!"
   progress: "&7Progreso del desafío: &6{name} &7- &6{progress}"
+  new_space: "&7Nuevo desafio disponible, usa &6/challenges get &7para verlo."
+  max_space: "&c¡No puedes tener más desafíos activos!"
+  available: "&7Desafíos disponibles:"
+  race_available: "&7Desafíos de carrera disponibles:"
+  solo_available: "&7Desafíos individuales disponibles:"
+  global_available: "&7Desafíos globales disponibles:"
+  info:
+    info: " &7(Info)"
+    mode: "&7Modo: &6"
+    type: "&7Tipo: &6"
+    material: "&7Material: &6"
+    progress: "&7Progreso: &6"
+    winning: "&7Ganando: &6"
 
 help:
 - "&7/happyhour start <mode> <time_minutes> &8- &7Iniciar una hora feliz."

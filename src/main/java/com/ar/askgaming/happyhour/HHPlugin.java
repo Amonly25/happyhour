@@ -6,7 +6,7 @@ import org.bukkit.plugin.java.JavaPlugin;
 
 import com.ar.askgaming.happyhour.Challenges.ChallengeManager;
 import com.ar.askgaming.happyhour.Events.HappyHourStartEvent;
-import com.ar.askgaming.happyhour.Listeners.PlayerJoinListener;
+import com.ar.askgaming.happyhour.Listeners.PlayerJoinQuitListener;
 import com.ar.askgaming.happyhour.Misc.Commands;
 import com.ar.askgaming.happyhour.Misc.HHScoreBoard;
 import com.ar.askgaming.happyhour.Misc.Language;
@@ -47,12 +47,14 @@ public class HHPlugin extends JavaPlugin{
 
         new Commands(this);
 
-        new PlayerJoinListener(this);
+        new PlayerJoinQuitListener(this);
     }
     public void onDisable(){
         for (Player pl : Bukkit.getOnlinePlayers()){
             scoreBoard.removePlayer(pl);
+            challengeManager.savePlayerChallenges(pl);
         }
+        challengeManager.savePlayerData();
     }
     private HHManager manager;
     private Language langManager;

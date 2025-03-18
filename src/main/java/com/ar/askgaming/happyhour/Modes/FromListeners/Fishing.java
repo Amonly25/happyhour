@@ -12,6 +12,7 @@ import org.bukkit.event.player.PlayerFishEvent.State;
 import com.ar.askgaming.happyhour.HHManager.Mode;
 import com.ar.askgaming.happyhour.HHPlugin;
 import com.ar.askgaming.happyhour.HappyHour;
+import com.ar.askgaming.happyhour.Challenges.ChallengeManager;
 
 public class Fishing implements Listener{
 
@@ -27,7 +28,7 @@ public class Fishing implements Listener{
             return;
         }
 
-        plugin.getChallengeManager().increaseProgress(Mode.FISHING, e.getPlayer(), null, null);
+        plugin.getChallengeManager().increaseProgress(ChallengeManager.Mode.FISHING, e.getPlayer(), null, null);
 
         List<HappyHour> activeHappyHours = plugin.getManager().getActiveHappyHours();
         if (activeHappyHours.isEmpty()) {

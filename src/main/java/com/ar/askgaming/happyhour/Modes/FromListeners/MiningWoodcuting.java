@@ -20,6 +20,7 @@ import org.bukkit.event.block.BlockPlaceEvent;
 import com.ar.askgaming.happyhour.HHManager.Mode;
 import com.ar.askgaming.happyhour.HHPlugin;
 import com.ar.askgaming.happyhour.HappyHour;
+import com.ar.askgaming.happyhour.Challenges.ChallengeManager;
 
 public class MiningWoodcuting implements Listener{
 
@@ -83,10 +84,10 @@ public class MiningWoodcuting implements Listener{
         List<String> mining = plugin.getConfig().getStringList("modes.mining.items");
         List<String> woodcutting = plugin.getConfig().getStringList("modes.woodcutting.items");
         if (mining.contains(block.getType().name())) {
-            plugin.getChallengeManager().increaseProgress(Mode.MINING, p, null, block.getType());
+            plugin.getChallengeManager().increaseProgress(ChallengeManager.Mode.MINING, p, null, block.getType());
         }
         if (woodcutting.contains(block.getType().name())) {
-            plugin.getChallengeManager().increaseProgress(Mode.WOODCUTTING, p, null, block.getType());
+            plugin.getChallengeManager().increaseProgress(ChallengeManager.Mode.WOODCUTTING, p, null, block.getType());
         }
     }
     private void processBlock(BlockDropItemEvent e, String blocksKey, String chanceKey, String multiplierKey) {
