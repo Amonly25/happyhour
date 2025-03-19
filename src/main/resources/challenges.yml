@@ -102,7 +102,6 @@ woodcutting_hard:
   rewards:
   - eco add %player% 50
 
-
 votifier_challenge:
   type: VOTIFIER
   name: "Votifier Challenge"

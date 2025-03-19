@@ -1,5 +1,6 @@
 package com.ar.askgaming.happyhour.Misc;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.bukkit.command.Command;
@@ -24,7 +25,13 @@ public class Commands implements TabExecutor {
     @Override
     public List<String> onTabComplete(CommandSender sender, Command command, String alias, String[] args) {
         if (args.length == 1) {
-            return List.of("start", "stop", "status", "help","reload");
+            List<String> list = new ArrayList<>();
+            list.add("status");
+            if (sender.hasPermission("happyhour.admin")) {
+                list.add("start");
+                list.add("stop");
+                list.add("reload");
+            }
         }
         if (args.length == 2) {
             if (args[0].equalsIgnoreCase("start")) {

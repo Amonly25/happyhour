@@ -10,9 +10,9 @@ public class ControlTask extends BukkitRunnable{
 
     private HHPlugin plugin;
     private ChallengeManager challengeManager;
-    public ControlTask(HHPlugin plugin) {
+    public ControlTask(HHPlugin plugin, ChallengeManager challengeManager) {
         this.plugin = plugin;
-        this.challengeManager = plugin.getChallengeManager();
+        this.challengeManager = challengeManager;
 
         runTaskTimer(plugin, 20*60, 20*60);
     }
@@ -25,6 +25,9 @@ public class ControlTask extends BukkitRunnable{
             Iterator<Challenge> it = v.iterator();
             while (it.hasNext()) {
                 Challenge c = it.next();
+                if (!c.isCompleted()) {
+                    continue;
+                }
                 if (currentTime - c.getCompletedTime() > newAfter) {
                     it.remove();
                     if (k != null) {

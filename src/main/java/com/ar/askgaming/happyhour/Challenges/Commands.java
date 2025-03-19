@@ -3,7 +3,6 @@ package com.ar.askgaming.happyhour.Challenges;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.bukkit.Color;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.command.TabExecutor;
@@ -11,11 +10,6 @@ import org.bukkit.entity.Player;
 
 import com.ar.askgaming.happyhour.HHPlugin;
 import com.ar.askgaming.happyhour.Challenges.ChallengeManager.Mode;
-import com.ar.askgaming.happyhour.Challenges.ChallengeManager.Type;
-
-import net.md_5.bungee.api.chat.HoverEvent;
-import net.md_5.bungee.api.chat.TextComponent;
-import net.md_5.bungee.api.chat.hover.content.Text;
 
 public class Commands implements TabExecutor {
 
@@ -130,21 +124,21 @@ public class Commands implements TabExecutor {
             if (!challenges.isEmpty()) {
                 player.sendMessage(getLang("challenge.global_available", player));
                 for (Challenge challenge : challenges) {
-                    sendChallegeHoverTextMessage(player, challenge);
+                    manager.sendChallegeHoverTextMessage(player, challenge);
                 }
             }
             List<Challenge> raceChallenges = manager.getRaceChallenges();
             if (!raceChallenges.isEmpty()) {
                 player.sendMessage(getLang("challenge.race_available", player));
                 for (Challenge challenge : raceChallenges) {
-                    sendChallegeHoverTextMessage(player, challenge);
+                    manager.sendChallegeHoverTextMessage(player, challenge);
                 }
             }
             List<Challenge> soloChallenges = manager.getSoloChallenges().get(player);
             if (soloChallenges != null && !soloChallenges.isEmpty()) {
                 player.sendMessage(getLang("challenge.solo_available", player));
                 for (Challenge challenge : soloChallenges) {
-                    sendChallegeHoverTextMessage(player, challenge);
+                    manager.sendChallegeHoverTextMessage(player, challenge);
                 }
             }
         }
@@ -164,7 +158,7 @@ public class Commands implements TabExecutor {
             player.sendMessage("Usage: /challenge get");
             return;
         }
-        Integer current = manager.getSoloChallenges().get(player).size();
+        Integer current = manager.getSoloChallenges().getOrDefault(player, new ArrayList<>()).size();
         Integer max = manager.getMaxChallenges(player);
         if (current >= max) {
             player.sendMessage(plugin.getLangManager().getLang("challenge.max", player));
@@ -173,36 +167,5 @@ public class Commands implements TabExecutor {
         Mode mode = manager.getRandomMode();
         manager.addSoloChallenge(player, mode);
     }
-    //#region sendText
-    private void sendChallegeHoverTextMessage(Player player, Challenge challenge) {
-        Color color = challenge.isCompleted() ? Color.GREEN : Color.GRAY;
-        TextComponent message = new TextComponent(color + challenge.getName());
 
-        String click = getLang("challenge.info.info", player);
-
-        TextComponent clickableText = new TextComponent(click);
-
-        StringBuilder sb = new StringBuilder();
-        sb.append(challenge.getDescription());
-        sb.append("\n");
-        String name = plugin.getLangManager().getLang(challenge.getMode().name().toLowerCase()+".name", player);
-        sb.append(getLang("challenge.info.mode", player) + name);
-        sb.append("\n");
-        if (challenge.getEntityType() != null) {
-            sb.append(getLang("challenge.info.type", player) + challenge.getEntityType()).append("\n");
-        }
-        if (challenge.getMaterial() != null) {
-            sb.append(getLang("challenge.info.material", player) + challenge.getMaterial()).append("\n");
-        }
-        if (challenge.getType() == Type.RACE){  
-            sb.append(getLang("challenge.info.winning", player) + challenge.getWinningPlayer());
-
-        }else sb.append(getLang("challenge.info.progress", player) + challenge.getProgress() + "/" + challenge.getAmount());
-
-        clickableText.setHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, new Text(sb.toString())));
-
-        message.addExtra(clickableText);
-
-        player.spigot().sendMessage(message);
-    }
 }

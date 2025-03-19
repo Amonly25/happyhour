@@ -55,6 +55,8 @@ public class HHPlugin extends JavaPlugin{
             challengeManager.savePlayerChallenges(pl);
         }
         challengeManager.savePlayerData();
+        MiningWoodcuting.saveData();
+        
     }
     private HHManager manager;
     private Language langManager;

@@ -104,4 +104,40 @@ modes:
         chance: 0.0 # 0%
         message: ""
         commands: {}
+
+# Challenges configuratio
+# Message type will be used to send the challenge progress to the player
+# Available types: actionbar, message, none
+message_type: "actionbar" 
+# On race and solo challenges, a random entity o material will be selected
+# On global challenges, all types apply
+hunting_animals_types:
+- COW
+- PIG
+- SHEEP
+- CHICKEN
+hunting_enemys_types:
+- ZOMBIE
+- SKELETON
+- SPIDER
+- CREEPER
+- ENDERMAN
+mining_types:
+- DIAMOND_ORE
+- COAL_ORE
+- EMERALD_ORE
+- REDSTONE_ORE
+- LAPIS_ORE
+- IRON_ORE
+- GOLD_ORE
+- COPPER_ORE
+woodcutting_types:
+- OAK_LOG
+- SPRUCE_LOG
+- BIRCH_LOG
+- JUNGLE_LOG
+- ACACIA_LOG
+- DARK_OAK_LOG
+
+
   

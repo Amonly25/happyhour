@@ -6,6 +6,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.bukkit.Location;
+import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.file.FileConfiguration;
@@ -14,6 +15,7 @@ import org.bukkit.entity.Item;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
+import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.event.block.BlockDropItemEvent;
 import org.bukkit.event.block.BlockPlaceEvent;
 
@@ -24,8 +26,8 @@ import com.ar.askgaming.happyhour.Challenges.ChallengeManager;
 
 public class MiningWoodcuting implements Listener{
 
-    private File file;
-    private FileConfiguration config;
+    private static File file;
+    private static FileConfiguration config;
     private HHPlugin plugin;
     public MiningWoodcuting(HHPlugin plugin) {
         this.plugin = plugin;
@@ -58,13 +60,12 @@ public class MiningWoodcuting implements Listener{
 
     @EventHandler
     public void onMine(BlockDropItemEvent e){
+
         Block block = e.getBlock();
-        Player p = e.getPlayer();
 
         if (protectedBlocks.contains(block.getLocation())) {
             return;
         }
-        checkBlockBreak(block, p);
 
         List<HappyHour> activeHappyHours = plugin.getManager().getActiveHappyHours();
         if (activeHappyHours.isEmpty()) {
@@ -80,14 +81,31 @@ public class MiningWoodcuting implements Listener{
             }
         }
     }
-    private void checkBlockBreak(Block block, Player p) {
+    @EventHandler
+    public void onBreak(BlockBreakEvent e) {
+        if (e.isCancelled()) {
+            return;
+        }
+        Block block = e.getBlock();
+        if (protectedBlocks.contains(block.getLocation())) {
+            return;
+        }
+        Player p = e.getPlayer();
+        checkBlockBreak(block.getType(), p);
+    }
+    private void checkBlockBreak(Material type, Player p) {
+
         List<String> mining = plugin.getConfig().getStringList("modes.mining.items");
         List<String> woodcutting = plugin.getConfig().getStringList("modes.woodcutting.items");
-        if (mining.contains(block.getType().name())) {
-            plugin.getChallengeManager().increaseProgress(ChallengeManager.Mode.MINING, p, null, block.getType());
+        for (String s : mining) {
+            if (type.name().contains(s)) {
+                plugin.getChallengeManager().increaseProgress(ChallengeManager.Mode.MINING, p, null, type);
+            }
         }
-        if (woodcutting.contains(block.getType().name())) {
-            plugin.getChallengeManager().increaseProgress(ChallengeManager.Mode.WOODCUTTING, p, null, block.getType());
+        for (String s : woodcutting) {
+            if (type.name().contains(s)) {
+                plugin.getChallengeManager().increaseProgress(ChallengeManager.Mode.WOODCUTTING, p, null, type);
+            }
         }
     }
     private void processBlock(BlockDropItemEvent e, String blocksKey, String chanceKey, String multiplierKey) {
@@ -120,16 +138,19 @@ public class MiningWoodcuting implements Listener{
     @EventHandler
     public void onPlace(BlockPlaceEvent e) {
         Block block = e.getBlock();
-        List<String> blocks = plugin.getConfig().getStringList("modes.mining.blocks");
-        List<String> woodcuttingBlocks = plugin.getConfig().getStringList("modes.woodcutting.blocks");
+        List<String> blocks = plugin.getConfig().getStringList("mining_types");
+        List<String> woodcuttingBlocks = plugin.getConfig().getStringList("woodcutting_types");
+
         if (blocks.contains(block.getType().name()) || woodcuttingBlocks.contains(block.getType().name())) {
             protectedBlocks.add(block.getLocation());
             config.set("protectedBlocks." + getXYZ(block.getLocation()), block.getLocation());
         }
+    }
+    public static void saveData() {
         try {
             config.save(file);
-        } catch (IOException e1) {
-            e1.printStackTrace();
+        } catch (Exception e) {
+            e.printStackTrace();
         }
     }
     private String getXYZ(Location loc) {

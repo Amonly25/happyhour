@@ -53,9 +53,21 @@ public class Challenge implements ConfigurationSerializable{
         this.rewards = (List<String>) map.get("rewards");
         this.players = (List<Player>) map.get("players");
         this.decription = (String) map.get("description");
-        this.entityType = EntityType.valueOf((String) map.get("entityType"));
-        this.material = Material.valueOf((String) map.get("material"));
-        this.completedTime = ((Number) map.get("timeleft")).longValue();
+
+        Object entityType = map.get("entityType");
+        if (entityType instanceof String) {
+            this.entityType = EntityType.valueOf((String) entityType);
+        } else {
+            this.entityType = null;
+        }
+        
+        Object material = map.get("material");
+        if (material instanceof String) {
+            this.material = Material.valueOf((String) material);
+        } else {
+            this.material = null;
+        }
+        this.completedTime = ((Number) map.get("completedTime")).longValue();
     }
     public void proccesRewards(){
         for (String reward : rewards) {
@@ -160,8 +172,8 @@ public class Challenge implements ConfigurationSerializable{
         map.put("rewards", rewards);
         map.put("players", players);
         map.put("description", decription);
-        map.put("entityType", entityType.toString());
-        map.put("material", material.toString());
+        map.put("entityType", entityType == null ? null : entityType.toString());
+        map.put("material", material == null ? null : material.toString());
         map.put("completedTime", completedTime);
         return map;
     }

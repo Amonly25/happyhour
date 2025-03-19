@@ -31,5 +31,6 @@ public class PlayerJoinQuitListener implements Listener{
         plugin.getChallengeManager().savePlayerChallenges(p);
         plugin.getChallengeManager().savePlayerData();
         plugin.getScoreBoard().removePlayer(p);
+        plugin.getChallengeManager().getSoloChallenges().remove(p);
     }
 }
