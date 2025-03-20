@@ -44,6 +44,14 @@ public class Commands implements TabExecutor {
             case "get":
                 get(sender,args);
                 break;
+            case "reload":
+                if (!sender.hasPermission("challenge.admin")) {
+                    sender.sendMessage("You don't have permission to use this command");
+                    return true;
+                }
+                manager.loadChallenges();
+                sender.sendMessage("Lang reloaded");
+                break;
             default:
                 break;
         }
@@ -59,6 +67,7 @@ public class Commands implements TabExecutor {
             if (sender.hasPermission("challenge.admin")) {
                 list.add("start");
                 list.add("add");
+                list.add("reload");
             }
             return list;
         }

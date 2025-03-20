@@ -258,6 +258,7 @@ public class ChallengeManager {
             if (challenge.getProgress() >= challenge.getAmount()) {
                 //plugin.getLogger().info("Challenge completed");
                 challenge.setCompleted(true);
+                challenge.setCompletedTime(System.currentTimeMillis());
                 challenge.proccesRewards();
                 player.sendMessage(plugin.getLangManager().getLang("challenge.completed", player).replace("{name}", challenge.getName()));
             }
@@ -382,14 +383,14 @@ public class ChallengeManager {
         //#region sendText
     public void sendChallegeHoverTextMessage(Player player, Challenge challenge) {
         String color = challenge.isCompleted() ? "§a" : "§7";
-        TextComponent message = new TextComponent(color + challenge.getName());
+        TextComponent message = new TextComponent(color + challenge.getName().replace('&', '§'));
 
         String click = getLang("challenge.info.info", player);
 
         TextComponent clickableText = new TextComponent(click);
 
         StringBuilder sb = new StringBuilder();
-        sb.append(challenge.getDescription());
+        sb.append(challenge.getDescription().replace('&', '§'));
         sb.append("\n");
         String name = plugin.getLangManager().getLang(challenge.getMode().name().toLowerCase()+".name", player);
         sb.append(getLang("challenge.info.mode", player) + name);

@@ -32,14 +32,14 @@ all:
   name: "¡TODOS LOS MODOS!"
 
 challenge:
-  start: "&7¡Desafío global iniciado}, complétalo para obtener recompensas!"
+  start: "&7¡Desafío global iniciado, complétalo para obtener recompensas!"
   race: "&7¡Desafío de carrera iniciado, el primero en completarlo obtendrá recompensas!"
   solo: "&7¡Nuevo desafio individual agregado."
   completed: "&7¡Desafío completado: &6{name}, felicidades!"
   progress: "&7Progreso del desafío: &6{name} &7- &6{progress}"
   new_space: "&7Nuevo desafio disponible, usa &6/challenges get &7para verlo."
   max: "&c¡No puedes tener más desafíos activos!"
-  available: "&7Desafíos disponibles:"
+  available: "&eDesafíos disponibles:"
   race_available: "&7Desafíos de carrera:"
   solo_available: "&7Desafíos individuales:"
   global_available: "&7Desafíos globales:"

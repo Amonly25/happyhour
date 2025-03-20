@@ -51,11 +51,6 @@ public class Commands implements TabExecutor {
             return true;
         }
 
-        if (!sender.hasPermission("happyhour.admin")) {
-            sender.sendMessage("§cYou don't have permission to use this command");
-            return true;
-        }
-
         switch (args[0].toLowerCase()) {
             case "start":
                 start(sender,args);
@@ -67,6 +62,10 @@ public class Commands implements TabExecutor {
                 status(sender, args);
                 break;    
             case "reload":
+                if (!sender.hasPermission("happyhour.admin")) {
+                    sender.sendMessage("§cYou don't have permission to use this command");
+                    return true;
+                }
                 plugin.reloadConfig();
                 sender.sendMessage("§aConfig reloaded");
                 break;
@@ -80,6 +79,10 @@ public class Commands implements TabExecutor {
 
     }
     private void start(CommandSender sender, String[] args){
+        if (!sender.hasPermission("happyhour.admin")) {
+            sender.sendMessage("§cYou don't have permission to use this command");
+            return;
+        }
         if (args.length == 1) {
             plugin.getManager().start();
             sender.sendMessage("§6You have started a random Happy Hour");
@@ -99,6 +102,10 @@ public class Commands implements TabExecutor {
         }
     }
     private void stop(CommandSender sender, String[] args){
+        if (!sender.hasPermission("happyhour.admin")) {
+            sender.sendMessage("§cYou don't have permission to use this command");
+            return;
+        }
         if (args.length == 1) {
             plugin.getManager().stop();
             sender.sendMessage("§6You have stopped all Happy Hours");

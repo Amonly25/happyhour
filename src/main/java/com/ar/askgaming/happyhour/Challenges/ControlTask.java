@@ -25,14 +25,11 @@ public class ControlTask extends BukkitRunnable{
             Iterator<Challenge> it = v.iterator();
             while (it.hasNext()) {
                 Challenge c = it.next();
-                if (!c.isCompleted()) {
-                    continue;
-                }
-                if (currentTime - c.getCompletedTime() > newAfter) {
-                    it.remove();
+                if (c.isCompleted() && (currentTime - c.getCompletedTime() > newAfter)) {
                     if (k != null) {
                         k.sendMessage(plugin.getLangManager().getLang("challenge.new_space", k));
                     }
+                    it.remove();
                 }
             }
         });

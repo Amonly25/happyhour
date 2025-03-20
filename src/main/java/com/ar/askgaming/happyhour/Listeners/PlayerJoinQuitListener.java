@@ -19,7 +19,14 @@ public class PlayerJoinQuitListener implements Listener{
     @EventHandler
     public void onJoin(PlayerJoinEvent e){
         Player p = e.getPlayer();
-        plugin.getChallengeManager().loadPlayerChallenges(p);
+        
+        plugin.getServer().getScheduler().runTaskLater(plugin, new Runnable() {
+            @Override
+            public void run() {
+                plugin.getChallengeManager().loadPlayerChallenges(p);
+            }
+        }, 20L);
+        
         if (plugin.getManager().getActiveHappyHours().isEmpty()) {
             return;
         }

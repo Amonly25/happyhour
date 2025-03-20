@@ -31,9 +31,26 @@ votifier:
 all:
   name: "ALL MODES!"
 
-
 challenge:
-  start: "&7Global Challenge started: &6{name}, complete it to get rewards!"
+  start: "&7Global challenge started, complete it to earn rewards!"
+  race: "&7Race challenge started, the first to complete it will receive rewards!"
+  solo: "&7New solo challenge added."
+  completed: "&7Challenge completed: &6{name}, congratulations!"
+  progress: "&7Challenge progress: &6{name} &7- &6{progress}"
+  new_space: "&7New challenge available, use &6/challenges get &7to view it."
+  max: "&cYou can't have more active challenges!"
+  available: "&eAvailable challenges:"
+  race_available: "&7Race challenges:"
+  solo_available: "&7Solo challenges:"
+  global_available: "&7Global challenges:"
+  info:
+    info: " &7(Info)"
+    mode: "&7Mode: &6"
+    type: "&7Type: &6"
+    material: "&7Material: &6"
+    progress: "&7Progress: &6"
+    winning: "&7Winning: &6"
+
 
 help:
 - "&7/happyhour start <mode> <time_minutes> &8- &7Start a happy hour."
