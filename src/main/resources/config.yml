@@ -105,6 +105,12 @@ modes:
         message: ""
         commands: {}
 
+# Only if UniversalNotifier is installed
+# This is usefull to send notificaions via telegram, discord or email
+# https://builtbybit.com/resources/universalnotifier-broadcast-alerts.62960/
+notifier:
+  start: "⏰ A new HappyHour of %mode% has started!"
+
 # Challenges configuratio
 # Message type will be used to send the challenge progress to the player
 # Available types: actionbar, message, none

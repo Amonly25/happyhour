@@ -1,4 +1,4 @@
-package com.ar.askgaming.happyhour.Misc;
+package com.ar.askgaming.happyhour;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -7,9 +7,6 @@ import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.command.TabExecutor;
 import org.bukkit.entity.Player;
-
-import com.ar.askgaming.happyhour.HHPlugin;
-import com.ar.askgaming.happyhour.HappyHour;
 
 import net.md_5.bungee.api.ChatColor;
 
@@ -32,6 +29,7 @@ public class Commands implements TabExecutor {
                 list.add("stop");
                 list.add("reload");
             }
+            return list;
         }
         if (args.length == 2) {
             if (args[0].equalsIgnoreCase("start")) {

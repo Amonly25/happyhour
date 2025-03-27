@@ -43,6 +43,7 @@ public class Challenge implements ConfigurationSerializable{
         this.entityType = entityType;
         this.material = material;
     }
+    @SuppressWarnings("unchecked")
     public Challenge(Map<String, Object> map) {
         this.mode = Mode.valueOf((String) map.get("mode"));
         this.type = Type.valueOf((String) map.get("type"));

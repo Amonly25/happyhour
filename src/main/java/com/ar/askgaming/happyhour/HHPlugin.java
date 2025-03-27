@@ -5,9 +5,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import com.ar.askgaming.happyhour.Challenges.ChallengeManager;
-import com.ar.askgaming.happyhour.Events.HappyHourStartEvent;
 import com.ar.askgaming.happyhour.Listeners.PlayerJoinQuitListener;
-import com.ar.askgaming.happyhour.Misc.Commands;
 import com.ar.askgaming.happyhour.Misc.HHScoreBoard;
 import com.ar.askgaming.happyhour.Misc.Language;
 import com.ar.askgaming.happyhour.Misc.PlaceHolder;
@@ -18,15 +16,17 @@ import com.ar.askgaming.happyhour.Modes.FromListeners.Fishing;
 import com.ar.askgaming.happyhour.Modes.FromListeners.Hunting;
 import com.ar.askgaming.happyhour.Modes.FromListeners.MiningWoodcuting;
 
-
 public class HHPlugin extends JavaPlugin{
 
+    private static HHPlugin instance;
+
     public void onEnable(){
+
+        instance = this;
         saveDefaultConfig();
 
-        manager = new HHManager(this);
+        manager = new HHManager();
         langManager = new Language(this);
-        happyHourStartEvent = new HappyHourStartEvent();
         scoreBoard = new HHScoreBoard(this);
         challengeManager = new ChallengeManager(this);
         
@@ -60,7 +60,6 @@ public class HHPlugin extends JavaPlugin{
     }
     private HHManager manager;
     private Language langManager;
-    private HappyHourStartEvent happyHourStartEvent;
     private HHScoreBoard scoreBoard;
     private ChallengeManager challengeManager;
     
@@ -70,18 +69,13 @@ public class HHPlugin extends JavaPlugin{
     public HHScoreBoard getScoreBoard() {
         return scoreBoard;
     }
-    public HappyHourStartEvent getHappyHourStartEvent() {
-        return happyHourStartEvent;
-    }
     public Language getLangManager() {
         return langManager;
-    }
-    public void setManager(HHManager manager) {
-        this.manager = manager;
     }
     public HHManager getManager() {
         return manager;
     }
-
-
+    public static HHPlugin getInstance() {
+        return instance;
+    }
 }

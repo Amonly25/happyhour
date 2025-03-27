@@ -20,13 +20,12 @@ import org.bukkit.scheduler.BukkitRunnable;
 import com.ar.askgaming.happyhour.Challenges.ChallengeManager;
 import com.ar.askgaming.happyhour.Events.HappyHourStartEvent;
 
-import net.md_5.bungee.api.ChatColor;
-
 public class HHManager extends BukkitRunnable{
 
-    private HHPlugin plugin;
-    public HHManager(HHPlugin plugin) {
-        this.plugin = plugin;
+    private final HHPlugin plugin;
+
+    public HHManager() {
+        this.plugin = HHPlugin.getInstance();
 
         runTaskTimer(plugin, 0, 20*60);
     }
@@ -40,7 +39,6 @@ public class HHManager extends BukkitRunnable{
         JOBS,
         VOTIFIER,
         ALL,
-
     }
 
     private final CopyOnWriteArrayList<HappyHour> activeHappyHours = new CopyOnWriteArrayList<>();
@@ -67,20 +65,12 @@ public class HHManager extends BukkitRunnable{
         plugin.getScoreBoard().setMode(displayName);
         hh.setDisplayName(displayName);
         hh.setDescription(description);
-        HappyHourStartEvent event = plugin.getHappyHourStartEvent();
-        event.setHh(hh);
-        event.setMode(mode);
+
+        HappyHourStartEvent event = new HappyHourStartEvent(hh);
         Bukkit.getPluginManager().callEvent(event);
         
         activeHappyHours.add(hh);
-        for (Player pl : Bukkit.getOnlinePlayers()){
-            plugin.getScoreBoard().addPlayer(pl);
-            String name = plugin.getLangManager().getLang(mode.name().toLowerCase()+".name", pl);
-            String descriptionMsg = plugin.getLangManager().getLang(mode.name().toLowerCase()+".description", pl);
-            pl.sendMessage("");
-            pl.sendMessage(plugin.getLangManager().getLang("start", pl).replace("{mode}", name));
-            pl.sendMessage(ChatColor.translateAlternateColorCodes('&', descriptionMsg));
-        }
+
         try {
             plugin.getChallengeManager().startGlobalChallenge(ChallengeManager.Mode.valueOf(mode.name()));
         } catch (Exception e) {
@@ -112,7 +102,7 @@ public class HHManager extends BukkitRunnable{
             stop(hh);
         }
     }
-
+    //#region getRandomMode
     public Mode getRandomMode() {
         List<String> modes = plugin.getConfig().getStringList("enabled_types");
         if (modes.isEmpty()) {
@@ -128,8 +118,9 @@ public class HHManager extends BukkitRunnable{
         return Mode.values()[(int) (Math.random() * Mode.values().length)];
     }
 
-    long broadcastCooldown = 0;
+    private long broadcastCooldown = 0;
 
+    //#region run
     @Override
     public void run() {
 
@@ -160,7 +151,7 @@ public class HHManager extends BukkitRunnable{
             }
         }
     }
-
+    //#region scheduler
     private void checkTimeForScheduler() {
 
         ConfigurationSection scheduler = plugin.getConfig().getConfigurationSection("scheduler");
@@ -196,6 +187,7 @@ public class HHManager extends BukkitRunnable{
             }
         }
     }
+    //#region getNext
     public long getMinutesToNextHappyHour() {
         ConfigurationSection scheduler = plugin.getConfig().getConfigurationSection("scheduler");
         if (scheduler == null) {

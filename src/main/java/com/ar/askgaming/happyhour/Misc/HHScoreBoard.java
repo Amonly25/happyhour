@@ -12,11 +12,7 @@ import com.ar.askgaming.happyhour.HHPlugin;
 public class HHScoreBoard {
 
     private Scoreboard board;
-
-    Team mode;
-    Team timeLeft;
-    Team count;
-    Team challenge;
+    private Team mode, timeLeft, count, challenge;
 
     private HHPlugin plugin;
     public HHScoreBoard(HHPlugin plugin) {
