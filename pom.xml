@@ -78,7 +78,6 @@
         <scope>provided</scope>
     </dependency>   
 
-    
     <dependency>
         <groupId>com.github.Amonly25</groupId>
         <artifactId>universalnotifier</artifactId>
